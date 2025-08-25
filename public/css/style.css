@@ -127,6 +127,15 @@
   color: #0059ff;
 }
 
+.singer-detail .inner-actions .inner-favorite.active {
+  color: #b90000;
+}
+
+.singer-detail .inner-actions .inner-favorite.active i {
+  font-weight: 900;
+  color: #b90000;
+}
+
 /* ==== Phần phát nhạc ==== */
 .singer-detail .inner-play {
   display: flex;

@@ -20,7 +20,7 @@ if (aplayer) {
     volumn: 0.8,
   });
 
-  const avatar = document.querySelector(".singer-detail .inner-avatar");
+  const avatar = document.querySelector(".music-detail .inner-avatar");
 
   ap.on("play", function () {
     avatar.style.animationPlayState = "running";
@@ -28,6 +28,23 @@ if (aplayer) {
 
   ap.on("pause", function () {
     avatar.style.animationPlayState = "paused";
+  });
+
+  ap.on("ended", function () {
+    const link = `/songs/listen/${dataSong._id}`;
+
+    const option = {
+      method: "PATCH",
+    };
+
+    fetch(link, option)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.code == 200) {
+          const elementListenSpan = document.querySelector(".music-detail .inner-listen span");
+          elementListenSpan.innerHTML = `${data.listen} lượt nghe`;
+        }
+      });
   });
 }
 // End APlayer

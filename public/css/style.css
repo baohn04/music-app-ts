@@ -102,8 +102,8 @@
 }
 /* End song-item */
 
-/* Singer-detail */
-.singer-detail .inner-title {
+/* music-detail */
+.music-detail .inner-title {
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 15px;
@@ -111,14 +111,14 @@
 }
 
 /* ==== Actions (ngày, ca sĩ, thể loại, lượt thích) ==== */
-.singer-detail .inner-actions {
+.music-detail .inner-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
   margin-bottom: 20px;
 }
 
-.singer-detail .inner-action {
+.music-detail .inner-action {
   font-size: 14px;
   color: #555;
   display: flex;
@@ -127,37 +127,37 @@
   cursor: pointer;
 }
 
-.singer-detail .inner-actions i {
+.music-detail .inner-actions i {
   color: #888;
 }
 
-.singer-detail .inner-actions .inner-like.active {
+.music-detail .inner-actions .inner-like.active {
   color: #0059ff;
 }
 
-.singer-detail .inner-actions .inner-like.active i {
+.music-detail .inner-actions .inner-like.active i {
   font-weight: 900;
   color: #0059ff;
 }
 
-.singer-detail .inner-actions .inner-favorite.active {
+.music-detail .inner-actions .inner-favorite.active {
   color: #b90000;
 }
 
-.singer-detail .inner-actions .inner-favorite.active i {
+.music-detail .inner-actions .inner-favorite.active i {
   font-weight: 900;
   color: #b90000;
 }
 
 /* ==== Phần phát nhạc ==== */
-.singer-detail .inner-play {
+.music-detail .inner-play {
   display: flex;
   gap: 20px;
   align-items: center;
   margin-bottom: 20px;
 }
 
-.singer-detail .inner-avatar {
+.music-detail .inner-avatar {
   /* hiệu ứng xoay tròn */
   animation: spin 8s linear infinite;
   animation-play-state: paused;
@@ -172,7 +172,7 @@
   }
 }
 
-.singer-detail .inner-avatar img {
+.music-detail .inner-avatar img {
   width: 150px;
   height: 150px;
   object-fit: cover;
@@ -182,18 +182,18 @@
 
 
 /* ==== Mô tả & Lời bài hát ==== */
-.singer-detail .inner-desc {
+.music-detail .inner-desc {
   margin-bottom: 20px;
 }
 
-.singer-detail .inner-label {
+.music-detail .inner-label {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 8px;
   color: #333;
 }
 
-.singer-detail .inner-text {
+.music-detail .inner-text {
   font-size: 15px;
   line-height: 1.6;
   color: #444;
@@ -202,7 +202,7 @@
   border-radius: 8px;
   white-space: pre-wrap;
 }
-/* End Singer-detail */
+/* End music-detail */
 
 /* Box-search */
 .box-search {

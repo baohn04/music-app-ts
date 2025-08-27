@@ -146,3 +146,38 @@ export const favorite = async (req: Request, res: Response) => {
     res.send("Page 404");
   }
 };
+
+// [PATCH] /songs/listen/:idSong
+export const listen = async (req: Request, res: Response) => {
+  try {
+    const idSong: string = req.params.idSong;
+
+    const song = await Song.findOne({
+      _id: idSong,
+      status: "active",
+      deleted: false
+    });
+
+    const newListen: number = song.listen + 1;
+
+    await Song.updateOne({
+      _id: idSong
+    }, {
+      listen: newListen
+    })
+
+    // Lấy lại thông tin bài hát sau khi update lượt nghe
+    const newSong = await Song.findOne({
+      _id: idSong
+    })
+
+    res.json({
+      code: 200,
+      message: "Thành công!",
+      listen: newSong.listen
+    })
+
+  } catch (error) {
+    res.send("Page 404");
+  }
+};

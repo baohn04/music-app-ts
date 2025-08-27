@@ -17,25 +17,24 @@ if (aplayer) {
       },
     ],
     autoplay: true,
-    volumn: 0.8
+    volumn: 0.8,
   });
 
   const avatar = document.querySelector(".singer-detail .inner-avatar");
-  
-  ap.on('play', function () {
+
+  ap.on("play", function () {
     avatar.style.animationPlayState = "running";
   });
 
-  ap.on('pause', function () {
+  ap.on("pause", function () {
     avatar.style.animationPlayState = "paused";
   });
 }
 // End APlayer
 
-
 // Button Like
 const buttonLike = document.querySelector("[button-like]");
-if(buttonLike) {
+if (buttonLike) {
   buttonLike.addEventListener("click", () => {
     const idSong = buttonLike.getAttribute("button-like");
     const isActive = buttonLike.classList.contains("active");
@@ -45,44 +44,92 @@ if(buttonLike) {
     const link = `/songs/like/${typeLike}/${idSong}`;
 
     const option = {
-      method: "PATCH"
-    }
+      method: "PATCH",
+    };
 
     fetch(link, option)
-      .then(res => res.json())
-      .then(data => {
-        if(data.code == 200) {
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.code == 200) {
           const span = buttonLike.querySelector("span");
           span.innerHTML = `${data.like} thích`;
           buttonLike.classList.toggle("active");
         }
-      })
+      });
   });
 }
 // End Button Like
 
 // Button Favorite
-const buttonFavorite = document.querySelector("[button-favorite]");
-if(buttonFavorite) {
-  buttonFavorite.addEventListener("click", () => {
-    const idSong = buttonFavorite.getAttribute("button-favorite");
-    const isActive = buttonFavorite.classList.contains("active");
+const listButtonFavorite = document.querySelectorAll("[button-favorite]");
+if (listButtonFavorite.length > 0) {
+  listButtonFavorite.forEach((buttonFavorite) => {
+    buttonFavorite.addEventListener("click", () => {
+      const idSong = buttonFavorite.getAttribute("button-favorite");
+      const isActive = buttonFavorite.classList.contains("active");
 
-    const typeFavorite = isActive ? "unfavorite" : "favorite";
+      const typeFavorite = isActive ? "unfavorite" : "favorite";
 
-    const link = `/songs/favorite/${typeFavorite}/${idSong}`;
+      const link = `/songs/favorite/${typeFavorite}/${idSong}`;
 
-    const option = {
-      method: "PATCH"
-    }
+      const option = {
+        method: "PATCH",
+      };
 
-    fetch(link, option)
-      .then(res => res.json())
-      .then(data => {
-        if(data.code == 200) {
-          buttonFavorite.classList.toggle("active");
-        }
-      })
+      fetch(link, option)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.code == 200) {
+            buttonFavorite.classList.toggle("active");
+          }
+        });
+    });
   });
 }
 // End Button Favorite
+
+// Search Suggest
+const boxSearch = document.querySelector(".box-search");
+if(boxSearch) {
+  const input = boxSearch.querySelector("input[name='keyword']");
+  const boxSuggest = boxSearch.querySelector(".inner-suggest");
+
+  input.addEventListener("keyup", () => {
+    const keyword = input.value;
+
+    const link = `/search/suggest?keyword=${keyword}`;
+
+    fetch(link)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.code == 200) {
+          const songs = data.songs;
+
+          if(songs.length > 0) {
+            boxSuggest.classList.add("show");
+
+            const htmls = songs.map(song => {
+              return `
+                <a href="songs/detail/${song.slug}" class="inner-item">
+                  <div class="inner-image">
+                    <img src="${song.avatar}" alt="${song.title}" />
+                  </div>
+                  <div class="inner-info">
+                    <div class="inner-title">${song.title}</div>
+                    <div class="inner-singer"><i class="fa-solid fa-microphone-lines"></i> ${song.infoSinger.fullName}</div>
+                  </div>
+                </a>
+              `;
+            });
+
+            const boxList = boxSuggest.querySelector(".inner-list");
+            boxList.innerHTML = htmls.join("");
+
+          } else {
+            boxSuggest.classList.remove("show");
+          }
+        }
+      });
+  });
+}
+// End Search Suggest

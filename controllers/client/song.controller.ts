@@ -60,13 +60,15 @@ export const detail = async (req: Request, res: Response) => {
       deleted: false
     }).select("title");
 
-    const favoriteSong = await FavoriteSong.findOne({
-      // userId: ...
-      songId: song.id
-    });
+    if(req["user"]) {
+      const favoriteSong = await FavoriteSong.findOne({
+        userId: req["user"].id,
+        songId: song.id
+      });
 
-    song["isFavoriteSong"] = favoriteSong ? true : false;
-
+      song["isFavoriteSong"] = favoriteSong ? true : false;
+    }
+    
     res.render("client/pages/songs/detail.pug", {
       pageTitle: song.title,
       song: song,
@@ -118,11 +120,12 @@ export const favorite = async (req: Request, res: Response) => {
     switch (typeFavorite) {
       case "favorite":
         const existFavoriteSong = await FavoriteSong.findOne({
+          userId: req["user"].id,
           songId: idSong
         });
         if(!existFavoriteSong) {
           const record = new FavoriteSong({
-            userId: "",
+            userId: req["user"].id,
             songId: idSong
           })
           await record.save();
@@ -130,6 +133,7 @@ export const favorite = async (req: Request, res: Response) => {
         break;
       case "unfavorite":
         await FavoriteSong.deleteOne({
+          userId: req["user"].id,
           songId: idSong
         });
         break;

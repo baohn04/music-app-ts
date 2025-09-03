@@ -41,5 +41,16 @@ header.header
               a(href="/") <i class="fa-solid fa-house"></i> Trang chủ
             li 
               a(href="/topics") <i class="fa-solid fa-music"></i> Chủ đề
-            li 
-              a(href="/favorite-songs") <i class="fa-solid fa-heart"></i> Nhạc yêu thích
+            if(user)
+              li 
+                a(href="/favorite-songs") <i class="fa-solid fa-heart"></i> Nhạc yêu thích
+              li
+                a(href="/users/info") #{user.fullName}
+              li
+                a(href="/users/logout") Đăng xuất
+            else
+              li 
+                a(href="/users/register") Đăng ký
+              li 
+                a(href="/users/login") Đăng nhập 
+    

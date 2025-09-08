@@ -1,5 +1,6 @@
 import express, { Express } from "express";
 import dotenv from "dotenv";
+import path from "path";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import session from "express-session";
@@ -8,6 +9,8 @@ import moment from "moment";
 import * as database from "./config/database";
 
 import clientRoutes from "./routes/client/index.route";
+import adminRoutes from "./routes/admin/index.route";
+import { systemConfig } from "./config/config";
 
 dotenv.config();
 
@@ -25,15 +28,25 @@ app.use(bodyParser.urlencoded());
 app.set("views", "./views");
 app.set("view engine", "pug");
 
+// Tiny MCE
+app.use(
+  "/tinymce",
+  express.static(path.join(__dirname, "node_modules", "tinymce"))
+);
+
+// App Local Variables
+app.locals.prefixAdmin = systemConfig.prefixAdmin;
+app.locals.moment = moment;
+
 // Cookie
-app.use(cookieParser('JKJHKAJSHDADGAS'));
-app.use(session({ cookie: { maxAge: 60000 }}));
+app.use(cookieParser("JKJHKAJSHDADGAS"));
+app.use(session({ cookie: { maxAge: 60000 } }));
 
 //Flash
 app.use(flash());
 
-// App Locals Variables
-app.locals.moment = moment;
+// Admin Routes
+adminRoutes(app);
 
 // Client Routes
 clientRoutes(app);

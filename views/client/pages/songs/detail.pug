@@ -40,4 +40,4 @@ block main
           .inner-desc 
             .inner-label Lời bài hát 
             .inner-text 
-              | !{song.lyrics}
+              | #{song.lyrics.replace(/\[\d{2}:\d{2}\.\d{2}\]/g, '')}

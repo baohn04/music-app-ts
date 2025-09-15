@@ -25,6 +25,7 @@ block main
               th Tiêu đề
               th Ca sĩ
               th Chủ đề
+              th Vị trí 
               th Trạng thái
               th Hành động
 
@@ -42,6 +43,7 @@ block main
                 td #{item.title}
                 td #{item.infoSinger.fullName}
                 td #{item.infoTopic.title}
+                td #{item.position}
                 td
                   if(item.status == "active")
                     a(

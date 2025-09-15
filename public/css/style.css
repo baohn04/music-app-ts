@@ -186,21 +186,21 @@
   margin-bottom: 20px;
 }
 
-.music-detail .inner-label {
+.music-detail .inner-desc .inner-label {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 8px;
   color: #333;
 }
 
-.music-detail .inner-text {
+.music-detail .inner-desc .inner-text {
   font-size: 15px;
   line-height: 1.6;
   color: #444;
   background: #f9f9f9;
   padding: 12px;
   border-radius: 8px;
-  white-space: pre-wrap;
+  white-space: pre;
 }
 /* End music-detail */
 

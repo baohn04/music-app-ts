@@ -43,6 +43,8 @@ export const index = async (req: Request, res: Response) => {
   if (req.query.sortKey && req.query.sortValue) {
     const sortKey = req.query.sortKey.toString();
     sort[sortKey] = req.query.sortValue;
+  } else {
+    sort["position"] = "desc";
   }
   // End Sort
 

@@ -3,10 +3,43 @@ import Topic from "../../models/topic.model";
 import Song from "../../models/song.model";
 import Singer from "../../models/singer.model";
 import { systemConfig } from "../../config/config";
+import filterStatusHelper from "../../helpers/filterStatus";
+import convertToSlug from "../../helpers/convertToSlug";
+import paginationHelper from "../../helpers/pagination";
 
 // [GET] /admin/songs/
 export const index = async (req: Request, res: Response) => {
-  // SORT
+  let find = {
+    deleted: false,
+  };
+
+  // Filter Status
+  const filterStatus = filterStatusHelper(req.query);
+
+  if(req.query.status) {
+    find["status"] = req.query.status.toString();
+  }
+  // End Filter Status
+
+  // Search
+  const keyword: string = req.query.keyword as string;
+
+  if (keyword && req.query.keyword !== "undefined") {
+    const keywordRegex = new RegExp(keyword, "i");
+
+    // convert to slug Ex: Cắt Đôi --> Cat-Doi --> cat-doi
+    const stringSlug = convertToSlug(keyword);
+    const stringSlugRegex = new RegExp(stringSlug, "i"); 
+    
+    // key $or trong object find dùng để search theo title hoặc slug
+    find["$or"] = [
+      { title: keywordRegex }, 
+      { slug: stringSlugRegex }
+    ];
+  }
+  // End Search
+  
+  // Sort
   const sort = {};
 
   if (req.query.sortKey && req.query.sortValue) {
@@ -15,11 +48,19 @@ export const index = async (req: Request, res: Response) => {
   } else {
     sort["position"] = "desc";
   }
-  // END SORT
+  // End Sort
 
-  const songs = await Song.find({
-    deleted: false,
-  }).sort(sort);
+  // Pagination
+  let initPagination = {
+    currentPage: 1,
+    limitItems: 4,
+  }
+
+  const countTopics = await Singer.countDocuments(find);
+  const objectPagination = paginationHelper(initPagination, req.query, countTopics);
+  // End Pagination
+
+  const songs = await Song.find(find).sort(sort).limit(objectPagination.limitItems).skip(objectPagination.skip);
 
   for (const song of songs) {
     const infoSinger = await Singer.findOne({
@@ -39,6 +80,9 @@ export const index = async (req: Request, res: Response) => {
   res.render("admin/pages/songs/index", {
     pageTitle: "Quản lý bài hát",
     songs: songs,
+    filterStatus: filterStatus,
+    keyword: keyword,
+    pagination: objectPagination
   });
 };
 
@@ -232,4 +276,25 @@ export const deleteItem = async (req: Request, res: Response) => {
   } catch (error) {
     res.redirect(`${systemConfig.prefixAdmin}/404-not-found`);
   }
+};
+
+// [PATCH] /admin/singers/change-status/:status/:id
+export const changeStatus = async (req: Request, res: Response) => {
+  const status: string = req.params.status;
+  const id: string = req.params.id;
+
+  console.log(status);
+  console.log(id);
+
+  await Song.updateOne(
+    {
+      _id: id,
+    },
+    {
+      status: status,
+    }
+  );
+
+  req.flash("success", "Cập nhật trạng thái thành công");
+  res.redirect(req.get("Referrer") || "/");
 };

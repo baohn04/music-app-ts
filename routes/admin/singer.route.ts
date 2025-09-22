@@ -1,9 +1,9 @@
 import { Router } from "express";
 import multer from "multer";
 
-import * as controller from "../../controllers/admin/topic.controller";
+import * as controller from "../../controllers/admin/singer.controller";
 import * as uploadCloud from "../../middlewares/admin/uploadCloud.middleware";
-import * as validate from "../../validates/admin/topic.validate";
+import * as validate from "../../validates/admin/singer.validate";
 
 const upload = multer();
 
@@ -36,4 +36,4 @@ router.delete("/delete/:id", controller.deleteItem);
 
 router.patch("/change-status/:status/:id", controller.changeStatus);
 
-export const topicRoutes: Router = router;
+export const singerRoutes: Router = router;

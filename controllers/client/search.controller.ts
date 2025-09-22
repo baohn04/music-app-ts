@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Song from "../../models/song.model";
 import Singer from "../../models/singer.model";
-import { convertToSlug } from "../../helpers/convertToSlug";
+import convertToSlug from "../../helpers/convertToSlug";
 
 // [GET] /search/:type
 export const typeSearch = async (req: Request, res: Response) => {

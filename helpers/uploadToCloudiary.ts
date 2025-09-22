@@ -28,7 +28,9 @@ let streamUpload = (buffer: any) => {
   });
 };
 
-export const uploadToCloudinary = async (buffer: any) => {
+const uploadToCloudinary = async (buffer: any) => {
   let result = await streamUpload(buffer);
   return result["secure_url"] || result["url"];
 };
+
+export default uploadToCloudinary;

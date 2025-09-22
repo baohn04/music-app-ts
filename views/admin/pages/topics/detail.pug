@@ -1,0 +1,36 @@
+extends ../../layouts/default.pug
+
+block main 
+  .admin-detail
+    h1(class="mb-4 title") Thông tin chủ đề: #{pageTitle}
+
+    if(topic.title)
+      h1(class="mb-4") Tên chủ đề: #{topic.title}
+
+    if(topic.avatar)
+      div(class="mb-4")
+        span Hình ảnh:
+        img(
+          src=topic.avatar 
+          alt=topic.title
+          style="width: 100px"
+        )
+
+    if(topic.status) 
+      div(class="mb-4")
+        span Trạng thái: 
+        if(topic.status === "active")
+          span(class="badge badge-success") Hoạt động
+        else 
+          span(class="badge badge-danger") Dừng hoạt động
+
+    if(topic.position)
+      div(class="mb-4") Vị trí: <b>#{topic.position}</b>
+
+    if(topic.description)
+      div(class="mb-4") Mô tả: !{topic.description}
+
+    a(
+      href=`${prefixAdmin}/topics/edit/${topic.id}`
+      class="btn btn-warning"
+    ) Chỉnh sửa 

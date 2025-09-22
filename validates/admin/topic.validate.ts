@@ -7,18 +7,6 @@ export const createPost = (req: Request, res: Response, next: NextFunction) => {
     return;
   }
 
-  if(!req.body.topicId) {
-    req.flash("error", "Vui lòng chọn chủ đề!");
-    res.redirect(req.get("Referrer") || "/");
-    return;
-  }
-
-  if(!req.body.singerId) {
-    req.flash("error", "Vui lòng chọn ca sĩ!");
-    res.redirect(req.get("Referrer") || "/");
-    return;
-  }
-
   if(!req.body.description) {
     req.flash("error", "Vui lòng nhập mô tả!");
     res.redirect(req.get("Referrer") || "/");

@@ -3,7 +3,7 @@ import md5 from "md5";
 import User from "../../models/user.model";
 import { generateRandomNumber, generateRandomString } from "../../helpers/generate";
 import ForgotPassword from "../../models/forgot-password.model";
-import { sendMail } from "../../helpers/sendMail";
+import sendMail from "../../helpers/sendMail";
 
 // [GET] /users/register
 export const register = async (req: Request, res: Response) => {
@@ -21,7 +21,7 @@ export const registerPost = async (req: Request, res: Response) => {
     });
 
     if (existEmail) {
-      // req.flash("error", "Email đã tồn tại!");
+      req.flash("error", "Email đã tồn tại!");
       res.redirect(req.get("Referrer") || "/");
       return;
     } else {
@@ -33,7 +33,7 @@ export const registerPost = async (req: Request, res: Response) => {
       
       res.cookie("tokenUser", user.token);
 
-      // req.flash("success", "Đăng ký thành công!");
+      req.flash("success", "Đăng ký thành công!");
       res.redirect("/");
     }
   } catch (error) {

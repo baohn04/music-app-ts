@@ -34,10 +34,10 @@ block main
           
           .inner-desc   
             .inner-label Mô tả
-            .inner-text 
+            .inner-text
               | !{song.description} 
 
-          .inner-desc 
+          .inner-desc
             .inner-label Lời bài hát 
-            .inner-text 
+            .inner-text
               | #{song.lyrics.replace(/\[\d{2}:\d{2}\.\d{2}\]/g, '')}

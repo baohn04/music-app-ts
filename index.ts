@@ -45,7 +45,7 @@ app.locals.moment = moment;
 
 // Cookie
 app.use(cookieParser("JKJHKAJSHDADGAS"));
-app.use(session({ cookie: { maxAge: 60000 } }));
+app.use(session({ cookie: { maxAge: 60000 }}));
 
 //Flash
 app.use(flash());

@@ -1,0 +1,33 @@
+extends ../../layouts/default.pug
+
+block main 
+  .admin-detail
+    h1(class="mb-4 title") Thông tin ca sĩ: #{pageTitle}
+
+    if(singer.fullName)
+      h1(class="mb-4") Tên ca sĩ: #{singer.fullName}
+
+    if(singer.avatar)
+      div(class="mb-4")
+        span Hình ảnh:
+        img(
+          src=singer.avatar 
+          alt=singer.fullName
+          style="width: 100px"
+        )
+
+    if(singer.status) 
+      div(class="mb-4")
+        span Trạng thái: 
+        if(singer.status === "active")
+          span(class="badge badge-success") Hoạt động
+        else 
+          span(class="badge badge-danger") Dừng hoạt động
+
+    if(singer.position)
+      div(class="mb-4") Vị trí: <b>#{singer.position}</b>
+
+    a(
+      href=`${prefixAdmin}/singers/edit/${singer.id}`
+      class="btn btn-warning"
+    ) Chỉnh sửa 

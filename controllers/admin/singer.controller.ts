@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import Topic from "../../models/topic.model";
+import Singer from "../../models/singer.model";
 import { systemConfig } from "../../config/config";
+import filterStatusHelper from "../../helpers/filterStatus";
 import convertToSlug from "../../helpers/convertToSlug";
 import paginationHelper from "../../helpers/pagination";
-import filterStatusHelper from "../../helpers/filterStatus";
 
-// [GET] /admin/topics/
+// [GET] /admin/singers/
 export const index = async (req: Request, res: Response) => {
   let find = {
     deleted: false,
@@ -52,99 +52,95 @@ export const index = async (req: Request, res: Response) => {
     limitItems: 4,
   }
 
-  const countTopics = await Topic.countDocuments(find);
+  const countTopics = await Singer.countDocuments(find);
   const objectPagination = paginationHelper(initPagination, req.query, countTopics);
   // End Pagination
 
-  const topics = await Topic.find(find).sort(sort).limit(objectPagination.limitItems).skip(objectPagination.skip);
+  const singers = await Singer.find(find).sort(sort).limit(objectPagination.limitItems).skip(objectPagination.skip);
 
-  res.render("admin/pages/topics/index", {
-    pageTitle: "Quản lý chủ đề",
-    topics: topics,
+  res.render("admin/pages/singers/index", {
+    pageTitle: "Quản lý ca sĩ",
+    singers: singers,
     filterStatus: filterStatus,
     keyword: keyword,
     pagination: objectPagination
   });
 };
 
-// [GET] /admin/topics/create
+// [GET] /admin/singers/create
 export const create = async (req: Request, res: Response) => {
-  res.render("admin/pages/topics/create", {
-    pageTitle: "Thêm mới chủ đề",
+  res.render("admin/pages/singers/create", {
+    pageTitle: "Thêm mới ca sĩ",
   });
 };
 
-// [POST] /admin/topics/create
+// [POST] /admin/singers/create
 export const createPost = async (req: Request, res: Response) => {
   try {
-    interface dataTopic {
-      title: string;
-      description: string;
+    interface dataSinger {
+      fullName: string;
       status: string;
       avatar: string;
       position: number;
     }
 
-    const dataTopic: dataTopic = {
-      title: req.body.title,
-      description: req.body.description,
+    const dataSinger: dataSinger = {
+      fullName: req.body.fullName,
       status: req.body.status,
       avatar: req.body.avatar,
-      position: (await Topic.countDocuments()) + 1,
+      position: (await Singer.countDocuments()) + 1,
     };
 
-    const topic = new Topic(dataTopic);
-    await topic.save();
+    const singer = new Singer(dataSinger);
+    await singer.save();
 
-    req.flash("success", "Thêm chủ đề thành công!");
-    res.redirect(`${systemConfig.prefixAdmin}/topics`);
+    req.flash("success", "Thêm ca sĩ thành công!");
+    res.redirect(`${systemConfig.prefixAdmin}/singers`);
   } catch (error) {
-    req.flash("error", "Thêm chủ đề thất bại!");
+    req.flash("error", "Thêm ca sĩ thất bại!");
   }
 };
 
-// [GET] /admin/topics/edit/:id
+// [GET] /admin/singers/edit/:id
 export const edit = async (req: Request, res: Response) => {
   const id: string = req.params.id;
 
-  const topic = await Topic.findOne({
+  const singer = await Singer.findOne({
     _id: id,
     deleted: false,
   });
 
-  res.render("admin/pages/topics/edit", {
-    pageTitle: "Chỉnh sửa chủ đề",
-    topic: topic,
+  res.render("admin/pages/singers/edit", {
+    pageTitle: "Chỉnh sửa ca sĩ",
+    singer: singer,
   });
 };
 
-// [PATCH] /admin/topics/edit/:id
+// [PATCH] /admin/singers/edit/:id
 export const editPatch = async (req: Request, res: Response) => {
   try {
     const id: string = req.params.id;
 
-    interface dataTopic {
-      title: string;
-      description: string;
+    interface dataSinger {
+      fullName: string;
       status: string;
       avatar?: string;
     }
 
-    const dataTopic: dataTopic = {
-      title: req.body.title,
-      description: req.body.description,
+    const dataSinger: dataSinger = {
+      fullName: req.body.fullName,
       status: req.body.status,
     };
 
     if (req.body.avatar) {
-      dataTopic["avatar"] = req.body.avatar;
+      dataSinger["avatar"] = req.body.avatar;
     }
 
-    await Topic.updateOne(
+    await Singer.updateOne(
       {
         _id: id,
       },
-      dataTopic
+      dataSinger
     );
 
     req.flash("success", "Cập nhật thành công!");
@@ -154,30 +150,30 @@ export const editPatch = async (req: Request, res: Response) => {
   }
 };
 
-// [GET] /admin/topics/detail/:id
+// [GET] /admin/singers/detail/:id
 export const detail = async (req: Request, res: Response) => {
   try {
     const id: string = req.params.id;
 
-    const topic = await Topic.findOne({
+    const singer = await Singer.findOne({
       _id: id,
       deleted: false,
     });
 
-    res.render("admin/pages/topics/detail", {
-      pageTitle: topic["title"],
-      topic: topic,
+    res.render("admin/pages/singers/detail", {
+      pageTitle: singer["fullName"],
+      singer: singer,
     });
   } catch (error) {
     res.redirect(`${systemConfig.prefixAdmin}/404-not-found`);
   }
 };
 
-// [DELETE] /admin/topics/delete/:id
+// [DELETE] /admin/singers/delete/:id
 export const deleteItem = async (req: Request, res: Response) => {
   try {
     const id: string = req.params.id;
-    await Topic.updateOne(
+    await Singer.updateOne(
       {
         _id: id,
       },
@@ -187,14 +183,14 @@ export const deleteItem = async (req: Request, res: Response) => {
       }
     );
 
-    req.flash("success", "Xóa chủ đề thành công!");
+    req.flash("success", "Xóa chủ đề ca sĩ!");
     res.redirect(req.get("Referrer") || "/");
   } catch (error) {
     res.redirect(`${systemConfig.prefixAdmin}/404-not-found`);
   }
 };
 
-// [PATCH] /admin/topics/change-status/:status/:id
+// [PATCH] /admin/singers/change-status/:status/:id
 export const changeStatus = async (req: Request, res: Response) => {
   const status: string = req.params.status;
   const id: string = req.params.id;
@@ -202,7 +198,7 @@ export const changeStatus = async (req: Request, res: Response) => {
   console.log(status);
   console.log(id);
 
-  await Topic.updateOne(
+  await Singer.updateOne(
     {
       _id: id,
     },

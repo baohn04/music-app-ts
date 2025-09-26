@@ -158,27 +158,31 @@ export const createPost = async (req: Request, res: Response) => {
 
 // [GET] /admin/songs/edit/:id
 export const edit = async (req: Request, res: Response) => {
-  const id: string = req.params.id;
+  try {
+    const id: string = req.params.id;
 
-  const song = await Song.findOne({
-    _id: id,
-    deleted: false,
-  });
+    const song = await Song.findOne({
+      _id: id,
+      deleted: false,
+    });
 
-  const topics = await Topic.find({
-    deleted: false,
-  }).select("title");
+    const topics = await Topic.find({
+      deleted: false,
+    }).select("title");
 
-  const singers = await Singer.find({
-    deleted: false,
-  }).select("fullName");
+    const singers = await Singer.find({
+      deleted: false,
+    }).select("fullName");
 
-  res.render("admin/pages/songs/edit", {
-    pageTitle: "Chỉnh sửa bài hát",
-    song: song,
-    topics: topics,
-    singers: singers,
-  });
+    res.render("admin/pages/songs/edit", {
+      pageTitle: "Chỉnh sửa bài hát",
+      song: song,
+      topics: topics,
+      singers: singers,
+    });
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/404-not-found`);
+  }
 };
 
 // [POST] /admin/songs/edit/:id
@@ -222,10 +226,11 @@ export const editPatch = async (req: Request, res: Response) => {
     );
 
     req.flash("success", "Cập nhật thành công!");
-    res.redirect(req.get("Referrer") || "/");
   } catch (error) {
     req.flash("error", "Cập nhật thất bại!");
   }
+
+  res.redirect(req.get("Referrer") || "/");
 };
 
 // [GET] /admin/songs/detail/:id

@@ -105,17 +105,21 @@ export const createPost = async (req: Request, res: Response) => {
 
 // [GET] /admin/singers/edit/:id
 export const edit = async (req: Request, res: Response) => {
-  const id: string = req.params.id;
+  try {
+    const id: string = req.params.id;
 
-  const singer = await Singer.findOne({
-    _id: id,
-    deleted: false,
-  });
+    const singer = await Singer.findOne({
+      _id: id,
+      deleted: false,
+    });
 
-  res.render("admin/pages/singers/edit", {
-    pageTitle: "Chỉnh sửa ca sĩ",
-    singer: singer,
-  });
+    res.render("admin/pages/singers/edit", {
+      pageTitle: "Chỉnh sửa ca sĩ",
+      singer: singer,
+    });
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/404-not-found`);
+  }
 };
 
 // [PATCH] /admin/singers/edit/:id
@@ -146,10 +150,11 @@ export const editPatch = async (req: Request, res: Response) => {
     );
 
     req.flash("success", "Cập nhật thành công!");
-    res.redirect(req.get("Referrer") || "/");
   } catch (error) {
     req.flash("error", "Cập nhật thất bại!");
   }
+
+  res.redirect(req.get("Referrer") || "/");
 };
 
 // [GET] /admin/singers/detail/:id
@@ -185,7 +190,7 @@ export const deleteItem = async (req: Request, res: Response) => {
       }
     );
 
-    req.flash("success", "Xóa chủ đề ca sĩ!");
+    req.flash("success", "Xóa ca sĩ thành công!");
     res.redirect(req.get("Referrer") || "/");
   } catch (error) {
     res.redirect(`${systemConfig.prefixAdmin}/404-not-found`);

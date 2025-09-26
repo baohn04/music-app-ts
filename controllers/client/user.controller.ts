@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import md5 from "md5";
 import User from "../../models/user.model";
-import { generateRandomNumber, generateRandomString } from "../../helpers/generate";
+import * as generate from "../../helpers/generate";
 import ForgotPassword from "../../models/forgot-password.model";
 import sendMail from "../../helpers/sendMail";
 
@@ -26,7 +26,7 @@ export const registerPost = async (req: Request, res: Response) => {
       return;
     } else {
       req.body.password = md5(req.body.password);
-      req.body.token = generateRandomString(20);
+      req.body.token = generate.generateRandomString(20);
 
       const user = new User(req.body);
       await user.save();
@@ -108,7 +108,7 @@ export const forgotPasswordPost = async (req: Request, res: Response) => {
   }
 
   // Lưu data otp vào database
-  const otp = generateRandomNumber(6);
+  const otp = generate.generateRandomNumber(6);
   const timeExpire = 3; // thoi gian het han 3 phut
 
   const objectForgotPassword = {

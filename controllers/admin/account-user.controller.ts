@@ -1,14 +1,12 @@
 import { Request, Response } from "express";
-import AccountAdmin from "../../models/account-admin.model";
-import Role from "../../models/role.model";
 import md5 from "md5";
-import * as generate from "../../helpers/generate";
-import { systemConfig } from "../../config/config";
-import convertToSlug from "../../helpers/convertToSlug";
 import filterStatusHelper from "../../helpers/filterStatus";
+import convertToSlug from "../../helpers/convertToSlug";
 import paginationHelper from "../../helpers/pagination";
+import User from "../../models/user.model";
+import { systemConfig } from "../../config/config";
 
-// [GET] /admin/accounts
+// [GET] /admin/users
 export const index = async (req: Request, res: Response) => {
   let find = {
     deleted: false
@@ -28,7 +26,7 @@ export const index = async (req: Request, res: Response) => {
   if (keyword && req.query.keyword !== "undefined") {
     const keywordRegex = new RegExp(keyword, "i");
 
-    // convert to slug Ex: Cắt Đôi --> Cat-Doi --> cat-doi
+    // convert to slug
     const stringSlug = convertToSlug(keyword);
     const stringSlugRegex = new RegExp(stringSlug, "i"); 
     
@@ -46,22 +44,14 @@ export const index = async (req: Request, res: Response) => {
     limitItems: 4,
   }
 
-  const countTopics = await AccountAdmin.countDocuments(find);
+  const countTopics = await User.countDocuments(find);
   const objectPagination = paginationHelper(initPagination, req.query, countTopics);
   // End Pagination
 
-  const records = await AccountAdmin.find(find).select("-password -token").limit(objectPagination.limitItems).skip(objectPagination.skip);
+  const records = await User.find(find).select("-password -token").limit(objectPagination.limitItems).skip(objectPagination.skip);
 
-  for (const record of records) {
-    const role = await Role.findOne({
-      _id: record.role_id,
-      deleted: false
-    });
-    record["role"] = role;
-  }
-
-  res.render("admin/pages/accounts/index", {
-    pageTitle: "Quản lý tài khoản",
+  res.render("admin/pages/users/index", {
+    pageTitle: "Quản lý User",
     records: records,
     filterStatus: filterStatus,
     keyword: keyword,
@@ -69,83 +59,19 @@ export const index = async (req: Request, res: Response) => {
   });
 };
 
-// [GET] /admin/accounts/create
-export const create = async (req: Request, res: Response) => {
-  const roles = await Role.find({
-    deleted: false
-  });
-
-  res.render("admin/pages/accounts/create", {
-    pageTitle: "Thêm mới tài khoản",
-    roles: roles
-  });
-};
-
-// [POST] /admin/accounts/create
-export const createPost = async (req: Request, res: Response) => {
-  try {
-    const emailExist = await AccountAdmin.findOne({
-      email: req.body.email,
-      deleted: false
-    });
-
-    if(emailExist) {
-      req.flash("error", `Email ${req.body.email} đã tồn tại!`);
-      res.redirect(req.get("Referrer") || "/");
-    } else {
-      interface dataAcount {
-        fullName: string,
-        email: string,
-        password: string,
-        phone: string,
-        role_id: string,
-        status: string,
-        avatar?: string,
-        token: string
-      };
-
-      const dataAcount: dataAcount = {
-        fullName: req.body.fullName,
-        email: req.body.email,
-        password: md5(req.body.password),
-        phone: req.body.phone,
-        role_id: req.body.role_id,
-        status: req.body.status,
-        token: generate.generateRandomString(20)
-      };
-
-      if(req.body.avatar) {
-        dataAcount["avatar"] = req.body.avatar;
-      }
-
-      const records = new AccountAdmin(dataAcount);
-      await records.save();
-      req.flash("success", "Tạo tài khoản thành công!");
-      res.redirect(`${systemConfig.prefixAdmin}/accounts`);
-    }
-  } catch (error) {
-    req.flash("error", "Tạo tài khoản không thành công!");
-  }
-};
-
-// [GET] /admin/accounts/edit/:id
+// [GET] /admin/users/edit/:id
 export const edit = async (req: Request, res: Response) => {
   try {
     const id: string = req.params.id;
 
-    const data = await AccountAdmin.findOne({
+    const data = await User.findOne({
       _id: id,
       deleted: false
     });
-
-    const roles = await Role.find({
-      deleted: false
-    });
   
-    res.render("admin/pages/accounts/edit", {
-      pageTitle: "Chỉnh sửa tài khoản",
-      data: data,
-      roles: roles
+    res.render("admin/pages/users/edit", {
+      pageTitle: "Chỉnh sửa User",
+      data: data
     });
   } catch (error) {
     res.redirect(`${systemConfig.prefixAdmin}/404-not-found`);
@@ -157,7 +83,7 @@ export const editPatch = async (req: Request, res: Response) => {
   try {
     const id: string = req.params.id;
     
-    const emailExist = await AccountAdmin.findOne({
+    const emailExist = await User.findOne({
       _id: { $ne: id },
       email: req.body.email,
       deleted: false
@@ -171,8 +97,6 @@ export const editPatch = async (req: Request, res: Response) => {
         fullName: string,
         email: string,
         password?: string,
-        phone: string,
-        role_id: string,
         status: string,
         avatar?: string,
       };
@@ -180,8 +104,6 @@ export const editPatch = async (req: Request, res: Response) => {
       const dataAcount: dataAcount = {
         fullName: req.body.fullName,
         email: req.body.email,
-        phone: req.body.phone,
-        role_id: req.body.role_id,
         status: req.body.status
       };
 
@@ -195,7 +117,7 @@ export const editPatch = async (req: Request, res: Response) => {
         dataAcount["avatar"] = req.body.avatar;
       }
 
-      await AccountAdmin.updateOne({ _id: id }, dataAcount);
+      await User.updateOne({ _id: id }, dataAcount);
       req.flash("success", "Cập nhật thành công!");
       res.redirect(req.get("Referrer") || "/");
     }
@@ -204,11 +126,11 @@ export const editPatch = async (req: Request, res: Response) => {
   }
 };
 
-// [DELETE] /admin/accounts/delete/:id
+// [DELETE] /admin/users/delete/:id
 export const deleteItem = async (req: Request, res: Response) => {
   try {
     const id: string = req.params.id;
-    await AccountAdmin.updateOne(
+    await User.updateOne(
       {
         _id: id,
       },
@@ -225,12 +147,12 @@ export const deleteItem = async (req: Request, res: Response) => {
   }
 };
 
-// [PATCH] /admin/accounts/change-status/:status/:id
+// [PATCH] /admin/users/change-status/:status/:id
 export const changeStatus = async (req: Request, res: Response) => {
   const status: string = req.params.status;
   const id: string = req.params.id;
 
-  await AccountAdmin.updateOne(
+  await User.updateOne(
     {
       _id: id,
     },

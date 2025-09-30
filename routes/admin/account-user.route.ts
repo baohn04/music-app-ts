@@ -1,7 +1,7 @@
 import { Router } from "express";
 import multer from "multer";
 
-import * as controller from "../../controllers/admin/account-admin.controller";
+import * as controller from "../../controllers/admin/account-user.controller";
 import * as uploadCloud from "../../middlewares/admin/uploadCloud.middleware";
 import * as validate from "../../validates/admin/account-admin.validate"
 

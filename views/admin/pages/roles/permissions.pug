@@ -133,7 +133,7 @@ block main
               td(class="text-center")
                 input(type="checkbox")
 
-          //- Tài khoản
+          //- Tài khoản Admin
           tr 
             td(colspan="4")
               b Tài khoản 
@@ -153,6 +153,26 @@ block main
               td(class="text-center")
                 input(type="checkbox")
           tr(data-name="accounts_delete")
+            td Xóa 
+            each item in records
+              td(class="text-center")
+                input(type="checkbox")
+
+          //- Tài khoản User
+          tr 
+            td(colspan="4")
+              b User 
+          tr(data-name="users_view")
+            td Xem 
+            each item in records
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="users_edit")
+            td Chỉnh sửa 
+            each item in records
+              td(class="text-center")
+                input(type="checkbox")
+          tr(data-name="users_delete")
             td Xóa 
             each item in records
               td(class="text-center")

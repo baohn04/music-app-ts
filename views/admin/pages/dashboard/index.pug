@@ -1,4 +1,63 @@
 extends ../../layouts/default.pug
 
-block main 
+block main
   h1 Trang tổng quan
+
+  .row.mt-4 
+    .col-12 
+      .card.mb-4 
+        .card-header Thông tin tài khoản 
+        .card-body 
+          if(user.avatar)
+            img(
+              src=user.avatar 
+              style="height: 100px; margin-bottom: 15px;"
+            )
+          if(user.fullName)
+            p Họ tên: <b>#{user.fullName}</b>
+          if(user.email)
+            p Email: <b>#{user.email}</b>
+          if(user.phone)
+            p Số điện thoại: <b>#{user.phone}</b>
+          if(role.title)
+            p Phân quyền: <b>#{role.title}</b>
+
+    .col-6 
+      .card.mb-4 
+        .card-header Thống kê chủ đề 
+        .card-body
+          p Số lượng: <b>#{statictis.topic.total}</b>
+          p Hoạt động: <b>#{statictis.topic.active}</b>
+          p Dừng hoạt động: <b>#{statictis.topic.inactive}</b>
+
+    .col-6 
+      .card.mb-4 
+        .card-header Thống kê ca sĩ
+        .card-body
+          p Số lượng: <b>#{statictis.singer.total}</b>
+          p Hoạt động: <b>#{statictis.singer.active}</b>
+          p Dừng hoạt động: <b>#{statictis.singer.inactive}</b>
+
+    .col-6 
+      .card.mb-4 
+        .card-header Thống kê bài hát
+        .card-body
+          p Số lượng: <b>#{statictis.song.total}</b>
+          p Hoạt động: <b>#{statictis.song.active}</b>
+          p Dừng hoạt động: <b>#{statictis.song.inactive}</b>
+
+    .col-6 
+      .card.mb-4 
+        .card-header Tài khoản admin 
+        .card-body
+          p Số lượng: <b>#{statictis.accountAdmin.total}</b>
+          p Hoạt động: <b>#{statictis.accountAdmin.active}</b>
+          p Dừng hoạt động: <b>#{statictis.accountAdmin.inactive}</b>
+
+    .col-6 
+      .card.mb-4 
+        .card-header Tài khoản client 
+        .card-body
+          p Số lượng: <b>#{statictis.accountUser.total}</b>
+          p Hoạt động: <b>#{statictis.accountUser.active}</b>
+          p Dừng hoạt động: <b>#{statictis.accountUser.inactive}</b>

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import multer from "multer";
 
-import * as controller from "../../controllers/admin/account-user.controller";
+import * as controller from "../../controllers/admin/info-admin.controller";
 import * as uploadCloud from "../../middlewares/admin/uploadCloud.middleware";
 
 const upload = multer();
@@ -10,17 +10,13 @@ const router: Router = Router();
 
 router.get("/", controller.index);
 
-router.get("/edit/:id", controller.edit);
+router.get("/edit/", controller.edit);
 
 router.patch(
-  "/edit/:id",
+  "/edit/",
   upload.single("avatar"),
   uploadCloud.uploadSingle,
   controller.editPatch
 );
 
-router.delete("/delete/:id", controller.deleteItem);
-
-router.patch("/change-status/:status/:id", controller.changeStatus);
-
-export const accountUserRoutes: Router = router;
+export const infoAdminRoutes: Router = router;

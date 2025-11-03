@@ -1,56 +1,50 @@
-header.header 
-  .container 
+header.header  
+  div(class="ms_header")
     .row.align-items-center 
-      .col-3 
-        .inner-logo 
-          a(href="/")
-            img(src=settingGeneral.logo, alt=settingGeneral.websiteName)
-
-      .col-5 
-        .box-search
-          form(
-            action="/search/result"
-            method="GET"
-          )
-            div(class="form-group d-flex mb-0")
-              input(
-                type="text"
-                placeholder="Nhập từ khóa..."
-                class="form-control"
-                name="keyword"
-                value=keyword 
+      .col-3
+      .col-6
+        div(class="ms_top_left")
+          div(class="box-search")
+            div(class="ms_top_search")
+              form(
+                action="/search/result"
+                method="GET"
               )
-              button(
-                type="submit"
-                class="btn btn-primary"
-              ) Tìm
-          .inner-suggest
-            .inner-list   
-              //- a(href="songs/detail/:slugSong" class="inner-item")
-              //-   .inner-image 
-              //-     img(src="", alt="")
-              //-   .inner-info 
-              //-     .inner-title Cắt đôi nỗi sầu 
-              //-     .inner-singer 
-              //-       <i class="fa solid fa-microphone-lines"></i> Tăng Duy Tân
-
-      .col-4 
-        .inner-menu 
-          ul 
-            li 
-              a(href="/") <i class="fa-solid fa-house"></i> Trang chủ
-            li 
-              a(href="/topics") <i class="fa-solid fa-music"></i> Chủ đề
-            if(user)
-              li 
-                a(href="/favorite-songs") <i class="fa-solid fa-heart"></i> Nhạc yêu thích
-              li
-                a(href="/users/info") #{user.fullName}
-              li
-                a(href="/users/logout") Đăng xuất
-            else
-              li 
-                a(href="/users/register") Đăng ký
-              li 
-                a(href="/users/login") Đăng nhập 
+                div(class="form-group d-flex mb-0")
+                  input(
+                    type="text"
+                    placeholder="Search Music Here.." 
+                    class="form-control"
+                    name="keyword"   
+                    value=keyword
+                  )
+                  button(
+                    type="submit"
+                    class="btn btn-primary"
+                  )
+                    span(class="search_icon")
+                      img(src="/images/svg/search.svg", alt="")
+            .inner-suggest
+              .inner-list
+                //- a(href="songs/detail/:slugSong" class="inner-item")
+                //-   .inner-image 
+                //-     img(src="", alt="")
+                //-   .inner-info 
+                //-     .inner-title Cắt đôi nỗi sầu 
+                //-     .inner-singer 
+                //-       <i class="fa solid fa-microphone-lines"></i> Tăng Duy Tân
+      .col-3
+        div(class="ms_top_right")
+          if(user)
+            div(class="ms_top_btn")
+              a(href="/users/info", class="")
+                span Hello, #{user.fullName}
+              a(href="/users/logout", class="ms_btn login_btn")
+                span đăng xuất
+          else
+            div(class="ms_top_btn")
+              a(href="/users/register", class="ms_btn reg_btn")
+                span đăng ký
+              a(href="/users/login", class="ms_btn login_btn")
+                span đăng nhập
     

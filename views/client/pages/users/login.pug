@@ -5,36 +5,50 @@ block main
   +alert-success(3000)
   +alert-error(3000)
 
-  .container.my-5 
-    .row.justify-content-center 
-      .col-8 
-        h1(class="text-center") Đăng nhập tài khoản
-        form(
-          action="/users/login"
-          method="POST"
-        )
-          div(class="form-group")
-            label(for="email") Email
-            input(
-              type="email"
-              class="form-control"
-              id="email"
-              name="email"
-              required
+  .container.my-5
+    div(class="modal-content")
+      .modal-body
+        .row
+          .col-md-6
+            div(class="ms_register_img")
+              img.img-fluid(src="/images/register_img.png", alt="")
+          .col-md-6
+            form(
+              action="/users/login"
+              method="POST"
             )
-          div(class="form-group")
-            label(for="password") Mật khẩu
-            input(
-              type="password"
-              class="form-control"
-              id="password"
-              name="password"
-              required
-            )
-          div(class="form-group")
-            button(
-              type="submit"
-              class="btn btn-primary btn-block"
-            ) Đăng nhập
-
-        a(href="/users/password/forgot") Quên mật khẩu
+              div(class="ms_register_form")
+                h2 Đăng nhập tài khoản
+                .form-group
+                  input.form-control(
+                    type="email",
+                    placeholder="Email",
+                    id="email",    
+                    name="email",
+                    required
+                  )
+                  span(class="form_icon")
+                    i(class="fa_icon form-envelope", aria-hidden="true")
+                .form-group
+                  input.form-control(
+                    type="password", 
+                    placeholder="Mật khẩu",
+                    id="password",  
+                    name="password",
+                    required        
+                  )
+                  span(class="form_icon")
+                    i(class="fa_icon form-lock", aria-hidden="true")
+                div(class="remember_checkbox")
+                  label
+                    | Ghi nhớ đăng nhập
+                    input(type="checkbox")
+                    span.checkmark
+                button(
+                  type="submit",
+                  class="ms_btn"
+                ) đăng nhập
+                div(class="popup_forgot")
+                  a(href="/users/password/forgot") Quên mật khẩu?
+                p Chưa có tài khoản? 
+                  a(href="/users/register") đăng ký

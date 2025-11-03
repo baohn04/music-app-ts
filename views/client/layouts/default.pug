@@ -2,21 +2,37 @@ doctype html
 html 
   head 
     title #{pageTitle}
-
+    //- Start style
     link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css")
     link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css")
     link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css")
-    link(rel="stylesheet", href="/css/style.css")
+    link(rel="stylesheet", type="text/css", href="/css/fonts.css")
+    link(rel="stylesheet", type="text/css", href="/js/plugins/swiper/css/swiper.min.css")
+    link(rel="stylesheet", type="text/css", href="/js/plugins/nice_select/nice-select.css")
+    link(rel="stylesheet", type="text/css", href="/js/plugins/player/volume.css")
+    link(rel="stylesheet", type="text/css", href="/js/plugins/scroll/jquery.mCustomScrollbar.css")
+    link(rel="stylesheet", href="/css/custom.css")
+    link(rel="stylesheet", type="text/css", href="/css/style.css")
 
   body 
+    div(class="ms_main_wrapper")
+      include ../partials/sider.pug
 
-    include ../partials/header.pug
+      div(class="ms_content_wrapper padder_top80")
+        include ../partials/header.pug
+        block main
 
-    block main
-
-    include ../partials/footer.pug
+      include ../partials/footer.pug
 
     script(src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js")
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js")
-    script(src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js")   
+    script(src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js")
+    script(type="text/javascript", src="/js/plugins/swiper/js/swiper.min.js")
+    script(type="text/javascript", src="/js/plugins/player/jplayer.playlist.min.js")
+    script(type="text/javascript", src="/js/plugins/player/jquery.jplayer.min.js")
+    script(type="text/javascript", src="/js/plugins/player/audio-player.js")
+    script(type="text/javascript", src="/js/plugins/player/volume.js")
+    script(type="text/javascript", src="/js/plugins/nice_select/jquery.nice-select.min.js")
+    script(type="text/javascript", src="/js/plugins/scroll/jquery.mCustomScrollbar.js")
     script(src="/js/script.js")  
+    script(type="text/javascript", src="/js/custom.js")   

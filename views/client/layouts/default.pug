@@ -6,6 +6,7 @@ html
     link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css")
     link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css")
     link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css")
+    link(rel="stylesheet", href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;300;400;600;700&display=swap")
     link(rel="stylesheet", type="text/css", href="/css/fonts.css")
     link(rel="stylesheet", type="text/css", href="/js/plugins/swiper/css/swiper.min.css")
     link(rel="stylesheet", type="text/css", href="/js/plugins/nice_select/nice-select.css")
@@ -13,6 +14,9 @@ html
     link(rel="stylesheet", type="text/css", href="/js/plugins/scroll/jquery.mCustomScrollbar.css")
     link(rel="stylesheet", href="/css/custom.css")
     link(rel="stylesheet", type="text/css", href="/css/style.css")
+
+    //- Favicon Link
+    link(rel="shortcut icon", type="image/png", href="/images/favicon.png")
 
   body 
     div(class="ms_main_wrapper")
@@ -23,16 +27,13 @@ html
         block main
 
       include ../partials/footer.pug
+      
 
-    script(src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js")
+    script(src="https://code.jquery.com/jquery-3.5.1.min.js")
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js")
     script(src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js")
     script(type="text/javascript", src="/js/plugins/swiper/js/swiper.min.js")
-    script(type="text/javascript", src="/js/plugins/player/jplayer.playlist.min.js")
-    script(type="text/javascript", src="/js/plugins/player/jquery.jplayer.min.js")
-    script(type="text/javascript", src="/js/plugins/player/audio-player.js")
-    script(type="text/javascript", src="/js/plugins/player/volume.js")
     script(type="text/javascript", src="/js/plugins/nice_select/jquery.nice-select.min.js")
     script(type="text/javascript", src="/js/plugins/scroll/jquery.mCustomScrollbar.js")
-    script(src="/js/script.js")  
     script(type="text/javascript", src="/js/custom.js")   
+    script(src="/js/script.js")

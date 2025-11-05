@@ -14,7 +14,7 @@ const clientRoutes = (app: Express): void => {
   app.use(userMiddleware.infoUser);
   app.use(settingMiddleware.settingGeneral);
 
-  app.use("/home", homeRoutes);
+  app.use("/", homeRoutes);
 
   app.use("/topics", topicRoutes);
 

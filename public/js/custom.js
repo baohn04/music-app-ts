@@ -419,6 +419,15 @@ Assigned to: Theme Forest
         setTimeout(function() {
             $('body').addClass('loaded');
         }, 500);
+
+        var currentPath = window.location.pathname;
+        $('.ms_nav_wrapper ul li a').each(function() {
+            var link = $(this);
+            if (link.attr('href') === currentPath) {
+                link.addClass('active');
+            }
+        });
+        
         // Li Lenght
         if ($('.jp-playlist ul li').length > 3) {
             $('.jp-playlist').addClass('find_li');

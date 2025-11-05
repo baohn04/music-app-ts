@@ -5,10 +5,12 @@ import Singer from "../../models/singer.model";
 import FavoriteSong from "../../models/favorite-song.model";
 
 // [GET] /songs/:slugTopic
-export const list = async (req: Request, res: Response) => {
+export const listByTopic = async (req: Request, res: Response) => {
   try {
+    const slugTopic = req.params.slugTopic;
+
     const topic = await Topic.findOne({
-      slug: req.params.slugTopic,
+      slug: slugTopic,
       status: "active",
       deleted: false,
     });
@@ -38,6 +40,41 @@ export const list = async (req: Request, res: Response) => {
   }
 };
 
+// [GET] /songs/singer/:slugSinger
+export const listBySinger = async (req: Request, res: Response) => {
+  try {
+    const slugSinger = req.params.slugSinger;
+
+    const singer = await Singer.findOne({
+      slug: slugSinger,
+      status: "active",
+      deleted: false
+    });
+
+    const songs = await Song.find({
+      singerId: singer.id,
+      status: "active",
+      deleted: false
+    }).select("avatar title slug singerId like");
+
+    for (const song of songs) {
+      const infoSinger = await Singer.findOne({
+        _id: song.singerId,
+        status: "active",
+        deleted: false,
+      });
+
+      song["infoSinger"] = infoSinger;
+    }
+
+    res.render("client/pages/songs/list.pug", {
+      pageTitle: `Ca sĩ: ${singer.fullName}`,
+      songs: songs
+    });
+  } catch (error) {
+    res.send("Trang 404");
+  }
+};
 
 // [GET] /songs/detail/:slugSong
 export const detail = async (req: Request, res: Response) => {

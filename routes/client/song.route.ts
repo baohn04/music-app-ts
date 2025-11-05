@@ -3,7 +3,9 @@ import * as controller from "../../controllers/client/song.controller";
 
 const router: Router = Router();
 
-router.get("/:slugTopic", controller.list);
+router.get("/topic/:slugTopic", controller.listByTopic);
+
+router.get("/singer/:slugSinger", controller.listBySinger);
 
 router.get("/detail/:slugSong", controller.detail);
 

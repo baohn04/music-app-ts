@@ -1,0 +1,88 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/topic-box.pug
+include ../../mixins/audio-player.pug
+
+block main
+  //- Top Topic
+  div(class="ms_genres_wrapper")
+    .row
+      .col-lg-12
+        div(class="ms_heading")
+          h1 top chủ đề
+          span(class="veiw_all")
+            a(href="/topics") xem thêm
+      div(class="ms_genres_item")
+        .row
+          each topic in topTopics
+            .col-lg-3
+              +topicBox(topic)
+
+  //- Top music
+  div#songs-data(data-songs=JSON.stringify(topListenSongs) data-singers=JSON.stringify(singers), style="display: none;")
+  div(class="ms_weekly_wrapper")
+    div(class="ms_weekly_inner")
+      .row
+        .col-lg-12
+          div(class="ms_heading")
+            h1 top 8 bài hát
+      .row
+        each song, index in topListenSongs
+          .col-lg-3.col-md-12
+            div(class="padding_right40")
+              div(class="ms_weekly_box")
+                div(class="weekly_left")
+                  span(class="w_top_no")= String(index + 1).padStart(2, '0')
+                  div(class="w_top_song")
+                    div(class="w_tp_song_img")
+                      img.img-fluid(src=song.avatar, alt=song.title)
+                      div(class="ms_song_overlay")
+                      div(class="ms_play_icon play-song-item", data-index=index)
+                        img(src="/images/svg/play.svg", alt="")
+                    div(class="w_tp_song_name")
+                      h3
+                        a(href=`/songs/detail/${song.slug}`) #{song.title}
+                      p #{song.infoSinger.fullName}
+                div(class="weekly_right")
+                  span(class="ms_more_icon", data-other="1")
+                    img(src="images/svg/more.svg", alt="")
+                ul(class="more_option")
+                  li
+                    a(href="#")
+                      span(class="opt_icon")
+                        span(class="icon icon_fav")
+                      | Add To Favourites
+                  li
+                    a(href="#")
+                      span(class="opt_icon")
+                        span(class="icon icon_queue")
+                      | Add To Playlists
+              div(class="ms_divider")
+
+  //- Singer
+  div(class="ms_featured_slider")
+    div(class="ms_heading")
+      h1 Ca sĩ
+      span(class="veiw_all")
+        a(href="/singers") xem thêm
+    div(class="ms_feature_slider swiper-container")
+      .swiper-wrapper
+        each singer in singers
+          .swiper-slide
+            div(class="ms_rcnt_box")
+              div(class="ms_rcnt_box_img")
+                img(src=singer.avatar, alt=singer.fullName)
+                div(class="ms_main_overlay")
+                  div(class="ms_box_overlay")
+                  a(href=`songs/singer/${singer.slug}`)
+                    div(class="ms_play_icon")
+                      img(src="/images/svg/play.svg", alt="")
+              div(class="ms_rcnt_box_text")
+                h3
+                  a(href=`/songs/singer/${singer.slug}`) #{singer.fullName}
+    //- Add Arrows
+    div(class="swiper-button-next1 slider_nav_next")
+    div(class="swiper-button-prev1 slider_nav_prev")
+  
+  //- Audio Player
+  +audioPlayer()

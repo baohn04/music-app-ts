@@ -168,3 +168,239 @@ if(boxSearch) {
   });
 }
 // End Search Suggest
+
+// Audio Player
+window.addEventListener('load', () => {
+  const dataContainer = document.getElementById('songs-data');
+  if (dataContainer) {
+    try {
+      window.topSongsForPlayer = JSON.parse(dataContainer.getAttribute('data-songs'));
+    } catch(e) {
+      console.error('Lỗi parse JSON songs:', e);
+      window.topSongsForPlayer = [];
+    }
+    try {
+      window.globalSingers = JSON.parse(dataContainer.getAttribute('data-singers')) || [];
+    } catch(e) {
+      console.error('Lỗi parse JSON singers:', e);
+      window.globalSingers = [];
+    }
+  } else {
+    window.topSongsForPlayer = window.topSongsForPlayer || [];
+    window.globalSingers = window.globalSingers || [];
+  }
+
+  // Khởi tạo APlayer global nếu có container và danh sách bài hát
+  const apContainer = document.getElementById('aplayer-global');
+  if (apContainer && window.topSongsForPlayer && window.topSongsForPlayer.length > 0) {
+    // Tạo map singerId => tên ca sĩ từ globalSingers
+    const singerNameById = {};
+    try {
+      window.globalSingers.forEach(s => {
+        if (s && s._id) singerNameById[String(s._id)] = s.fullName || '';
+      });
+    } catch(_e) {}
+
+    const apAudioList = window.topSongsForPlayer.map(song => {
+      const artistName = singerNameById[String(song.singerId)] || '';
+      return {
+        name: song.title,
+        artist: artistName,
+        url: song.audio,
+        cover: song.avatar
+      };
+    });
+
+    window.apGlobal = new APlayer({
+      container: apContainer,
+      lrcType: 0,
+      audio: apAudioList,
+      autoplay: false,
+      volume: 0.8,
+      listFolded: true
+    });
+
+    // Helper: event delegation
+    const on = (event, selector, handler) => {
+      document.addEventListener(event, e => {
+        const targetElement = e.target.closest(selector);
+        if (targetElement) handler(e, targetElement);
+      });
+    };
+
+    // Wire prev button
+    on('click', '.aplayer-prev', (e, el) => {
+      e.preventDefault();
+      if (window.apGlobal && typeof window.apGlobal.skipBack === 'function') {
+        window.apGlobal.skipBack();
+      }
+    });
+    // Wire next button
+    on('click', '.aplayer-next', (e, el) => {
+      e.preventDefault();
+      if (window.apGlobal && typeof window.apGlobal.skipForward === 'function') {
+        window.apGlobal.skipForward();
+      }
+    });
+
+    // Play/Pause button
+    on('click', '.aplayer-play-pause', (e, el) => {
+      e.preventDefault();
+      if (!window.apGlobal) return;
+      try {
+        if (window.apGlobal.audio && window.apGlobal.audio.paused) {
+          window.apGlobal.play();
+        } else {
+          window.apGlobal.pause();
+        }
+      } catch(err) { console.error(err); }
+    });
+
+    // Volume control
+    on('input', '.aplayer-volume', (e, el) => {
+      const v = parseFloat(el.value);
+      if (!isNaN(v) && window.apGlobal && typeof window.apGlobal.volume === 'function') {
+        window.apGlobal.volume(v);
+      }
+    });
+    on('change', '.aplayer-volume', (e, el) => {
+      const v = parseFloat(el.value);
+      if (!isNaN(v) && window.apGlobal && typeof window.apGlobal.volume === 'function') {
+        window.apGlobal.volume(v);
+      }
+    });
+
+    // Progress control
+    const formatTime = sec => {
+      if(!isFinite(sec)) return '00:00';
+      const m = Math.floor(sec/60); const s = Math.floor(sec%60);
+      return (m<10?'0'+m:m)+':' + (s<10?'0'+s:s);
+    };
+
+    on('input', '.aplayer-progress', (e, el) => {
+      if(!window.apGlobal || !window.apGlobal.audio) return;
+      const percent = parseFloat(el.value) || 0;
+      const dur = window.apGlobal.audio.duration || 0;
+      const seekTo = dur * (percent/100);
+      try { window.apGlobal.seek(seekTo); } catch(err) {}
+    });
+    on('change', '.aplayer-progress', (e, el) => {
+      if(!window.apGlobal || !window.apGlobal.audio) return;
+      const percent = parseFloat(el.value) || 0;
+      const dur = window.apGlobal.audio.duration || 0;
+      const seekTo = dur * (percent/100);
+      try { window.apGlobal.seek(seekTo); } catch(err) {}
+    });
+
+    // Helper to update compact UI
+    const updateCompactUI = (index) => {
+      try {
+        const list = window.apGlobal.list.audios;
+        const current = (typeof index === 'number') ? list[index] : list[window.apGlobal.list.index];
+        if (!current) return;
+        const $wrap = document.querySelector('.aplayer-custom');
+        if (!$wrap) return;
+        const titleNode = $wrap.querySelector('.ap-title');
+        const artistNode = $wrap.querySelector('.ap-artist');
+        const coverNode = $wrap.querySelector('.ap-cover');
+        if (titleNode) titleNode.textContent = current.name || '';
+        if (artistNode) artistNode.textContent = current.artist || '';
+        if (coverNode) coverNode.setAttribute('src', current.cover || '/images/logo.png');
+        const btnNode = $wrap.querySelector('.aplayer-play-pause i');
+        if (btnNode) {
+          if (window.apGlobal.audio && window.apGlobal.audio.paused) {
+            btnNode.classList.remove('fa-pause');
+            btnNode.classList.add('fa-play');
+          } else {
+            btnNode.classList.remove('fa-play');
+            btnNode.classList.add('fa-pause');
+          }
+        }
+      } catch(e) { console.error(e); }
+    };
+
+    // Initial UI
+    updateCompactUI(0);
+
+    // Sync on events
+    window.apGlobal.on('play', () => updateCompactUI());
+    window.apGlobal.on('pause', () => updateCompactUI());
+    window.apGlobal.on('listswitch', obj => updateCompactUI(obj.index));
+    window.apGlobal.on('loadeddata', () => {
+      const dur = window.apGlobal.audio ? window.apGlobal.audio.duration : 0;
+      document.querySelectorAll('.ap-time-duration').forEach(node => node.textContent = formatTime(dur));
+      document.querySelectorAll('.aplayer-progress').forEach(node => node.value = 0);
+      document.querySelectorAll('.ap-time-current').forEach(node => node.textContent = '00:00');
+    });
+    window.apGlobal.on('timeupdate', () => {
+      if(!window.apGlobal || !window.apGlobal.audio) return;
+      const cur = window.apGlobal.audio.currentTime || 0;
+      const dur = window.apGlobal.audio.duration || 0;
+      const percent = dur>0 ? (cur/dur*100) : 0;
+      document.querySelectorAll('.aplayer-progress').forEach(node => node.value = percent);
+      document.querySelectorAll('.ap-time-current').forEach(node => node.textContent = formatTime(cur));
+      document.querySelectorAll('.ap-time-duration').forEach(node => node.textContent = formatTime(dur));
+    });
+
+    // Replay toggle and behavior
+    window.__apReplay = false;
+    on('click', '.aplayer-replay', (e, el) => {
+      e.preventDefault();
+      window.__apReplay = !window.__apReplay;
+      if (window.__apReplay) {
+        el.classList.add('active');
+      } else {
+        el.classList.remove('active');
+      }
+    });
+    window.apGlobal.on('ended', () => {
+      if(window.__apReplay){
+        try { window.apGlobal.play(); } catch(e) {}
+      }
+    });
+  }
+
+  // Event listener play từ danh sách top 8
+  document.addEventListener('click', (e) => {
+    const el = e.target.closest('.play-song-item');
+    if (!el) return;
+    e.preventDefault();
+    e.stopPropagation();
+
+    const index = parseInt(el.getAttribute('data-index'));
+    if (typeof window.apGlobal !== 'undefined' && window.apGlobal.list && !isNaN(index)) {
+      try {
+        window.apGlobal.list.switch(index);
+        window.apGlobal.play();
+
+        // UI: clear previous active and restore icons
+        document.querySelectorAll('.ms_weekly_box').forEach(b => b.classList.remove('ms_active_play'));
+        document.querySelectorAll('.ms_weekly_box .ms_play_icon').forEach($ic => {
+          $ic.innerHTML = '<img src="/images/svg/play.svg" alt=""/>';
+        });
+
+        // Set active for current and swap icon to bars
+        const box = el.closest('.ms_weekly_box');
+        if (box) {
+          box.classList.add('ms_active_play');
+          const icon = box.querySelector('.ms_play_icon');
+          if (icon) {
+            icon.innerHTML = `
+              <div class="ms_bars">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+              </div>
+            `;
+          }
+        }
+      } catch(err) {
+        console.error(err);
+      }
+    }
+  });
+});
+// End Audio Player

@@ -15,11 +15,28 @@ export const listByTopic = async (req: Request, res: Response) => {
       deleted: false,
     });
 
+    const topics = await Topic.find({
+      _id: { $ne: topic._id },
+      status: "active",
+      deleted: false
+    })
+
     const songs = await Song.find({
       topicId: topic.id,
       status: "active",
       deleted: false,
-    }).select("avatar title slug singerId like");
+    }).select("avatar title slug singerId like listen audio");
+
+    // Lấy danh sách singerId duy nhất từ songs của topic này
+    const singerIds = songs.map(song => song.singerId);
+    // Xử lý singerIds trùng lặp: set()
+    const uniqueSingerIds = Array.from(new Set(singerIds.map(id => id.toString())));
+
+    const singersOfTopic = await Singer.find({
+      _id: { $in: uniqueSingerIds },
+      status: "active",
+      deleted: false
+    });
 
     for (const song of songs) {
       const infoSinger = await Singer.findOne({
@@ -31,9 +48,12 @@ export const listByTopic = async (req: Request, res: Response) => {
       song["infoSinger"] = infoSinger;
     }
 
-    res.render("client/pages/songs/list.pug", {
+    res.render("client/pages/songs/listByTopic.pug", {
       pageTitle: topic.title,
-      songs: songs
+      topic: topic,
+      topics: topics,
+      songs: songs,
+      singersOfTopic: singersOfTopic,
     });
   } catch (error) {
     res.send("Page 404");
@@ -48,14 +68,21 @@ export const listBySinger = async (req: Request, res: Response) => {
     const singer = await Singer.findOne({
       slug: slugSinger,
       status: "active",
+      deleted: false,
+    });
+
+    const similarNationSingers = await Singer.find({
+      _id: { $ne: singer._id },
+      nation: singer.nation,
+      status: "active",
       deleted: false
     });
 
     const songs = await Song.find({
       singerId: singer.id,
       status: "active",
-      deleted: false
-    }).select("avatar title slug singerId like");
+      deleted: false,
+    }).select("avatar title slug singerId like listen audio");
 
     for (const song of songs) {
       const infoSinger = await Singer.findOne({
@@ -67,12 +94,14 @@ export const listBySinger = async (req: Request, res: Response) => {
       song["infoSinger"] = infoSinger;
     }
 
-    res.render("client/pages/songs/list.pug", {
-      pageTitle: `Ca sĩ: ${singer.fullName}`,
-      songs: songs
+    res.render("client/pages/songs/listBySinger.pug", {
+      pageTitle: singer.fullName,
+      singer: singer,
+      similarNationSingers: similarNationSingers,
+      songs: songs,
     });
   } catch (error) {
-    res.send("Trang 404");
+    res.send("Page 404");
   }
 };
 
@@ -80,42 +109,42 @@ export const listBySinger = async (req: Request, res: Response) => {
 export const detail = async (req: Request, res: Response) => {
   try {
     const slugSong: String = req.params.slugSong;
-    
+
     const song = await Song.findOne({
       slug: slugSong,
       status: "active",
-      deleted: false
+      deleted: false,
     });
 
     const singer = await Singer.findOne({
       _id: song.singerId,
-      deleted: false
+      deleted: false,
     }).select("fullName");
 
     const topic = await Topic.findOne({
       _id: song.topicId,
-      deleted: false
+      deleted: false,
     }).select("title");
 
-    if(req["user"]) {
+    if (req["user"]) {
       const favoriteSong = await FavoriteSong.findOne({
         userId: req["user"].id,
-        songId: song.id
+        songId: song.id,
       });
 
       song["isFavoriteSong"] = favoriteSong ? true : false;
     }
-    
+
     res.render("client/pages/songs/detail.pug", {
       pageTitle: song.title,
       song: song,
       singer: singer,
-      topic: topic
+      topic: topic,
     });
   } catch (error) {
     res.send("Page 404");
   }
-}; 
+};
 
 // [PATCH] /songs/like/:typeLike/:idSong
 export const like = async (req: Request, res: Response) => {
@@ -126,23 +155,25 @@ export const like = async (req: Request, res: Response) => {
     const song = await Song.findOne({
       _id: idSong,
       status: "active",
-      deleted: false
+      deleted: false,
     });
 
     const newLike: number = typeLike == "like" ? song.like + 1 : song.like - 1;
 
-    await Song.updateOne({
-      _id: idSong
-    }, {
-      like: newLike
-    })
+    await Song.updateOne(
+      {
+        _id: idSong,
+      },
+      {
+        like: newLike,
+      }
+    );
 
     res.json({
       code: 200,
       message: "Thành công!",
-      like: newLike
-    })
-
+      like: newLike,
+    });
   } catch (error) {
     res.send("Page 404");
   }
@@ -158,20 +189,20 @@ export const favorite = async (req: Request, res: Response) => {
       case "favorite":
         const existFavoriteSong = await FavoriteSong.findOne({
           userId: req["user"].id,
-          songId: idSong
+          songId: idSong,
         });
-        if(!existFavoriteSong) {
+        if (!existFavoriteSong) {
           const record = new FavoriteSong({
             userId: req["user"].id,
-            songId: idSong
-          })
+            songId: idSong,
+          });
           await record.save();
         }
         break;
       case "unfavorite":
         await FavoriteSong.deleteOne({
           userId: req["user"].id,
-          songId: idSong
+          songId: idSong,
         });
         break;
       default:
@@ -181,8 +212,7 @@ export const favorite = async (req: Request, res: Response) => {
     res.json({
       code: 200,
       message: "Thành công!",
-    })
-
+    });
   } catch (error) {
     res.send("Page 404");
   }
@@ -196,28 +226,30 @@ export const listen = async (req: Request, res: Response) => {
     const song = await Song.findOne({
       _id: idSong,
       status: "active",
-      deleted: false
+      deleted: false,
     });
 
     const newListen: number = song.listen + 1;
 
-    await Song.updateOne({
-      _id: idSong
-    }, {
-      listen: newListen
-    })
+    await Song.updateOne(
+      {
+        _id: idSong,
+      },
+      {
+        listen: newListen,
+      }
+    );
 
     // Lấy lại thông tin bài hát sau khi update lượt nghe
     const newSong = await Song.findOne({
-      _id: idSong
-    })
+      _id: idSong,
+    });
 
     res.json({
       code: 200,
       message: "Thành công!",
-      listen: newSong.listen
-    })
-
+      listen: newSong.listen,
+    });
   } catch (error) {
     res.send("Page 404");
   }

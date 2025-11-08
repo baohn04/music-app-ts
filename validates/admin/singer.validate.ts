@@ -6,6 +6,12 @@ export const createPost = (req: Request, res: Response, next: NextFunction) => {
     res.redirect(req.get("Referrer") || "/");
     return;
   }
+
+  if(!req.body.nation) {
+    req.flash("error", "Vui lòng nhập quốc gia!");
+    res.redirect(req.get("Referrer") || "/");
+    return;
+  }
   
   next(); // Chuyển sang đoạn mã kế tiếp
 }

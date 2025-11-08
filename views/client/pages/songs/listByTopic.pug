@@ -1,0 +1,69 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/audio-player.pug
+
+block main
+  .ms_album_single_wrapper.ms_artist_single
+    .album_single_data
+      .album_single_img
+        img.img-fluid(src=topic.avatar alt=topic.title)
+      .album_single_text
+        h2 #{topic.title}
+        .about_artist
+          | !{topic.description} 
+    //- --Song List--
+    div#songs-data(data-songs=JSON.stringify(songs) data-singers=JSON.stringify(singersOfTopic), style="display: none;")
+    .album_inner_list
+      .album_list_wrapper
+        ul.album_list_name
+          li #
+          li Tên bài hát
+          li Ca sĩ
+          li.text-center Lượt nghe
+          li.text-center Like
+          li.text-center Yêu thích
+        each song, index in songs
+          ul
+            li
+              a(class="play-audio")
+                span.play_no= String(index + 1).padStart(2, '0')
+                span.play_hover.play-song-audio(data-index=index)
+            li
+              a(href=`/songs/detail/${song.slug}`) #{song.title}
+            li
+              a(href=`/songs/singer/${song.infoSinger.slug}`) #{song.infoSinger.fullName}
+            li.text-center
+              a(href='#') #{song.listen}
+            li.text-center
+              a(href='#') #{song.like}
+            li.text-center
+              a(href='#')
+                span.ms_icon1.ms_fav_icon
+
+  .ms_content_wrapper.ms_artist_content
+    .ms_featured_slider
+      .ms_heading
+        h1 Chủ đề khác
+      .ms_relative_inner
+        .ms_feature_slider.swiper-container
+          .swiper-wrapper
+            each topic in topics
+              .swiper-slide
+                .ms_rcnt_box
+                  .ms_rcnt_box_img
+                    img(src=topic.avatar alt=topic.title)
+                    .ms_main_overlay
+                      a(href=`${topic.slug}`)
+                        .ms_box_overlay
+                        .ms_play_icon
+                          img(src='/images/svg/play.svg' alt='')
+                  .ms_rcnt_box_text
+                    h3
+                      a(href=`${topic.slug}`) #{topic.title}
+        //- Add Arrows
+        .swiper-button-next1.slider_nav_next
+        .swiper-button-prev1.slider_nav_prev
+  //- --Main div close--
+
+  //- Audio Player
+  +audioPlayer()

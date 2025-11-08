@@ -23,6 +23,16 @@ block main
           required
           value=singer.fullName
         )
+      div(class="form-group")
+        label(for="nation") Quốc gia
+        input(
+          type="text"
+          class="form-control"
+          id="nation"
+          name="nation"
+          required
+          value=singer.nation
+        )
       div(
         class="form-group"
         upload-image

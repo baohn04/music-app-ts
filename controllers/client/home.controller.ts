@@ -11,33 +11,36 @@ export const home = async (req: Request, res: Response) => {
         from: "songs",
         localField: "_id",
         foreignField: "topicId",
-        as: "songs"
-      }
+        as: "songs",
+      },
     },
     {
       $addFields: {
-        song_count: { $size: "$songs" }
-      }
+        song_count: { $size: "$songs" },
+      },
     },
     {
       $sort: {
-        song_count: -1
-      }
+        song_count: -1,
+      },
     },
     {
-      $limit: 4
-    }
+      $limit: 4,
+    },
   ]);
 
   const topListenSongs = await Song.find({
     status: "active",
     deleted: false,
-  }).sort({ listen: "desc" }).limit(15);
+  })
+    .select("avatar title slug singerId like audio")
+    .sort({ listen: "desc" })
+    .limit(8);
 
   for (const song of topListenSongs) {
     const infoSinger = await Singer.findOne({
       _id: song.singerId,
-      deleted: false
+      deleted: false,
     });
 
     song["infoSinger"] = infoSinger;
@@ -45,13 +48,13 @@ export const home = async (req: Request, res: Response) => {
 
   const singers = await Singer.find({
     status: "active",
-    deleted: false
+    deleted: false,
   });
 
   res.render("client/pages/home/index.pug", {
     pageTitle: "Trang chủ",
     topTopics: topTopics,
     topListenSongs: topListenSongs,
-    singers: singers
+    singers: singers,
   });
 };

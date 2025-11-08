@@ -7,6 +7,7 @@ const singerSchema = new mongoose.Schema(
   {
     fullName: String,
     avatar: String,
+    nation: String,
     status: String,
     slug: {
       type: String,

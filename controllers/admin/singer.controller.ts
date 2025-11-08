@@ -81,6 +81,7 @@ export const createPost = async (req: Request, res: Response) => {
   try {
     interface dataSinger {
       fullName: string;
+      nation: string;
       status: string;
       avatar: string;
       position: number;
@@ -88,6 +89,7 @@ export const createPost = async (req: Request, res: Response) => {
 
     const dataSinger: dataSinger = {
       fullName: req.body.fullName,
+      nation: req.body.nation,
       status: req.body.status,
       avatar: req.body.avatar,
       position: (await Singer.countDocuments()) + 1,
@@ -129,12 +131,14 @@ export const editPatch = async (req: Request, res: Response) => {
 
     interface dataSinger {
       fullName: string;
+      nation: string;
       status: string;
       avatar?: string;
     }
 
     const dataSinger: dataSinger = {
       fullName: req.body.fullName,
+      nation: req.body.nation,
       status: req.body.status,
     };
 

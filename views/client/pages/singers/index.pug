@@ -1,0 +1,23 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main 
+  div(class="ms_top_artist")
+    .container-fluid
+      .row
+        .col-lg-12
+          div(class="ms_heading")
+            h1 Ca sĩ
+        each singer in singers
+          .col-lg-2.col-md-6
+            div(class="ms_rcnt_box marger_bottom30")
+              div(class="ms_rcnt_box_img")
+                img.img-fluid(src=singer.avatar, alt=singer.fullName)
+                div(class="ms_main_overlay")
+                  a(href=`songs/singer/${singer.slug}`)
+                    div(class="ms_box_overlay")
+                    div(class="ms_play_icon")
+                      img(src="/images/svg/play.svg", alt="")
+              div(class="ms_rcnt_box_text")
+                h3
+                  a(href=`songs/singer/${singer.slug}`) #{singer.fullName}

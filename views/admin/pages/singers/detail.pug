@@ -7,6 +7,9 @@ block main
     if(singer.fullName)
       h1(class="mb-4") Tên ca sĩ: #{singer.fullName}
 
+    if(singer.nation)
+      h1(class="mb-4") Quốc gia: #{singer.nation}
+
     if(singer.avatar)
       div(class="mb-4")
         span Hình ảnh:

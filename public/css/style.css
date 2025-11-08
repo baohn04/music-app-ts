@@ -1683,7 +1683,7 @@ span.ovrly_text2 {
 }
 /*====Footer Css Start====*/
 .ms_footer_wrapper {
-  background-image: url(../images/footer_bg.png);
+  background-image: url(/images/footer_bg.png);
   background-size: cover;
   position: relative;
   z-index: 1;
@@ -1981,9 +1981,6 @@ h1.footer_title:after {
 }
 .ms_player_close {
   display: none;
-}
-body {
-  padding-bottom: 84px;
 }
 .ms_player_wrapper .aplayer-custom {
   align-items: center;

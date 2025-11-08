@@ -49,6 +49,7 @@ block main
                 th STT
                 th Hình ảnh
                 th Tên ca sĩ
+                th Quốc gia
                 th Vị trí
                 th Trạng thái
                 th Hành động
@@ -65,6 +66,7 @@ block main
                       height="auto"
                     )
                   td #{item.fullName}
+                  td #{item.nation}
                   td #{item.position}
                   td
                     if(role.permissions.includes("singers_edit"))

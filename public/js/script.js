@@ -175,20 +175,73 @@ window.addEventListener('load', () => {
   if (dataContainer) {
     try {
       window.topSongsForPlayer = JSON.parse(dataContainer.getAttribute('data-songs'));
+      if (!Array.isArray(window.topSongsForPlayer)) {
+        window.topSongsForPlayer = window.topSongsForPlayer ? [window.topSongsForPlayer] : [];
+      }
     } catch(e) {
-      console.error('Lỗi parse JSON songs:', e);
+      console.error('Error parse JSON songs:', e);
       window.topSongsForPlayer = [];
     }
     try {
       window.globalSingers = JSON.parse(dataContainer.getAttribute('data-singers')) || [];
+      if (!Array.isArray(window.globalSingers)) {
+        window.globalSingers = window.globalSingers ? [window.globalSingers] : [];
+      }
     } catch(e) {
-      console.error('Lỗi parse JSON singers:', e);
+      console.error('Error parse JSON singers:', e);
       window.globalSingers = [];
     }
   } else {
     window.topSongsForPlayer = window.topSongsForPlayer || [];
     window.globalSingers = window.globalSingers || [];
   }
+
+  // Helper function to update compact UI (global trong scope này)
+  const updateCompactUI = (index) => {
+    if (!window.apGlobal) return;
+    try {
+      const list = window.apGlobal.list.audios;
+      const current = (typeof index === 'number') ? list[index] : list[window.apGlobal.list.index];
+      if (!current) return;
+      const $wrap = document.querySelector('.aplayer-custom');
+      if (!$wrap) return;
+      const titleNode = $wrap.querySelector('.ap-title');
+      const artistNode = $wrap.querySelector('.ap-artist');
+      const coverNode = $wrap.querySelector('.ap-cover');
+      if (titleNode) titleNode.textContent = current.name || '';
+      if (artistNode) artistNode.textContent = current.artist || '';
+      if (coverNode) coverNode.setAttribute('src', current.cover || '/images/logo.png');
+      const btnNode = $wrap.querySelector('.aplayer-play-pause i');
+      if (btnNode) {
+        if (window.apGlobal.audio && window.apGlobal.audio.paused) {
+          btnNode.classList.remove('fa-pause');
+          btnNode.classList.add('fa-play');
+        } else {
+          btnNode.classList.remove('fa-play');
+          btnNode.classList.add('fa-pause');
+        }
+      }
+    } catch(e) { console.error(e); }
+  };
+
+  // Helper function để cập nhật UI của play_btn (global trong scope này)
+  const updatePlayBtnUI = (isPlaying) => {
+    const playBtn = document.querySelector('.play_btn');
+    if (!playBtn) return;
+    
+    const playAllSpan = playBtn.querySelector('.play_all');
+    const pauseAllSpan = playBtn.querySelector('.pause_all');
+    
+    if (isPlaying) {
+      // Đang phát -> hiện pause, ẩn play
+      if (playAllSpan) playAllSpan.style.display = 'none';
+      if (pauseAllSpan) pauseAllSpan.style.display = '';
+    } else {
+      // Đang dừng -> hiện play, ẩn pause
+      if (playAllSpan) playAllSpan.style.display = '';
+      if (pauseAllSpan) pauseAllSpan.style.display = 'none';
+    }
+  };
 
   // Khởi tạo APlayer global nếu có container và danh sách bài hát
   const apContainer = document.getElementById('aplayer-global');
@@ -202,7 +255,7 @@ window.addEventListener('load', () => {
     } catch(_e) {}
 
     const apAudioList = window.topSongsForPlayer.map(song => {
-      const artistName = singerNameById[String(song.singerId)] || '';
+      const artistName = singerNameById[String(song.singerId)] || (song.infoSinger && song.infoSinger.fullName) || '';
       return {
         name: song.title,
         artist: artistName,
@@ -292,33 +345,6 @@ window.addEventListener('load', () => {
       try { window.apGlobal.seek(seekTo); } catch(err) {}
     });
 
-    // Helper to update compact UI
-    const updateCompactUI = (index) => {
-      try {
-        const list = window.apGlobal.list.audios;
-        const current = (typeof index === 'number') ? list[index] : list[window.apGlobal.list.index];
-        if (!current) return;
-        const $wrap = document.querySelector('.aplayer-custom');
-        if (!$wrap) return;
-        const titleNode = $wrap.querySelector('.ap-title');
-        const artistNode = $wrap.querySelector('.ap-artist');
-        const coverNode = $wrap.querySelector('.ap-cover');
-        if (titleNode) titleNode.textContent = current.name || '';
-        if (artistNode) artistNode.textContent = current.artist || '';
-        if (coverNode) coverNode.setAttribute('src', current.cover || '/images/logo.png');
-        const btnNode = $wrap.querySelector('.aplayer-play-pause i');
-        if (btnNode) {
-          if (window.apGlobal.audio && window.apGlobal.audio.paused) {
-            btnNode.classList.remove('fa-pause');
-            btnNode.classList.add('fa-play');
-          } else {
-            btnNode.classList.remove('fa-play');
-            btnNode.classList.add('fa-pause');
-          }
-        }
-      } catch(e) { console.error(e); }
-    };
-
     // Initial UI
     updateCompactUI(0);
 
@@ -358,6 +384,14 @@ window.addEventListener('load', () => {
         try { window.apGlobal.play(); } catch(e) {}
       }
     });
+
+    // Đồng bộ UI ban đầu cho play_btn
+    const isPlaying = window.apGlobal.audio && !window.apGlobal.audio.paused;
+    updatePlayBtnUI(isPlaying);
+    
+    // Lắng nghe sự kiện play/pause để cập nhật UI
+    window.apGlobal.on('play', () => updatePlayBtnUI(true));
+    window.apGlobal.on('pause', () => updatePlayBtnUI(false));
   }
 
   // Event listener play từ danh sách top 8
@@ -400,6 +434,52 @@ window.addEventListener('load', () => {
       } catch(err) {
         console.error(err);
       }
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    const el = e.target.closest('.play-song-audio');
+    if (!el) return;
+    e.preventDefault();
+    e.stopPropagation();
+
+    const index = parseInt(el.getAttribute('data-index'), 10);
+    if (typeof window.apGlobal === 'undefined' || !window.apGlobal.list || isNaN(index)) {
+      return;
+    }
+
+    try {
+      window.apGlobal.list.switch(index);
+      window.apGlobal.play();
+      updateCompactUI(index);
+
+      // Tìm ul cha bằng cách đi lên từ element được click
+      let parentUl = null;
+      let current = el;
+      
+      // Đi lên từ element để tìm ul cha (bỏ qua header)
+      while (current && current !== document.body) {
+        if (current.tagName === 'UL' && !current.classList.contains('album_list_name')) {
+          parentUl = current;
+          break;
+        }
+        current = current.parentElement;
+      }
+      
+      // Xóa class khỏi tất cả các ul trong album_list_wrapper (trừ header)
+      const albumListWrapper = document.querySelector('.album_list_wrapper');
+      if (albumListWrapper) {
+        albumListWrapper.querySelectorAll('ul:not(.album_list_name)').forEach(ul => {
+          ul.classList.remove('play_active_song');
+        });
+        
+        // Thêm class vào ul cha nếu tìm thấy
+        if (parentUl) {
+          parentUl.classList.add('play_active_song');
+        }
+      }
+    } catch(err) {
+      console.error(err);
     }
   });
 });

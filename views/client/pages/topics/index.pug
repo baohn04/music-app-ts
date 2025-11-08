@@ -1,18 +1,15 @@
 extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
+include ../../mixins/topic-box.pug
 
 block main 
-  .container.my-3 
-    .row 
-      .col-12 
-        +box-head(pageTitle)
-
+  div(class="ms_genres_wrapper")
     .row
-      each topic in topics 
-        .col-6.mb-3 
-          div(class="card")
-            img(src=topic.avatar, alt=topic.title)
-            div(class="card-body")
-              h5(class="card-title") #{topic.title} 
-              p(class="card-description") !{topic.description} 
-              a(href=`songs/${topic.slug}` class="btn btn-primary") Xem chi tiết
+      .col-lg-12
+        div(class="ms_heading")
+          h1 chủ đề
+      div(class="ms_genres_item")
+        .row
+          each topic in topics
+            .col-lg-3
+              +topicBox(topic)

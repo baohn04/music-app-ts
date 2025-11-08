@@ -9,6 +9,7 @@ import * as authMiddleware from "../../middlewares/client/auth.middleware";
 import * as userMiddleware from "../../middlewares/client/user.middleware";
 import * as settingMiddleware from "../../middlewares/client/settingGeneral.middleware";
 import { homeRoutes } from "./home.route";
+import { singerRoutes } from "./singer.route";
 
 const clientRoutes = (app: Express): void => {
   app.use(userMiddleware.infoUser);
@@ -19,6 +20,8 @@ const clientRoutes = (app: Express): void => {
   app.use("/topics", topicRoutes);
 
   app.use("/songs", songRoutes);
+
+  app.use("/singers", singerRoutes);
   
   app.use("/favorite-songs", authMiddleware.requireAuth, favoriteSongRoutes);
 

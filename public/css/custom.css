@@ -88,6 +88,11 @@
 /* End song-item */
 
 /* music-detail */
+.music-detail {
+  margin-left: 160px;
+  margin-right: 80px;
+}
+
 .music-detail .inner-title {
   font-size: 24px;
   font-weight: 700;
@@ -95,43 +100,64 @@
   color: #222;
 }
 
-/* ==== Actions (ngày, ca sĩ, thể loại, lượt thích) ==== */
+/* --------- Actions bar cho .music-detail --------- */
 .music-detail .inner-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
-  margin-bottom: 20px;
+  gap: 20px 0px;
+  margin-bottom: 22px;
+  align-items: center;
 }
 
 .music-detail .inner-action {
-  font-size: 14px;
-  color: #555;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
+  font-size: 1.13rem;
+  color: #fff;
+  padding: 10px 16px 10px 14px;
+  transition: background 0.15s, color 0.15s, box-shadow 0.21s;
+  font-weight: 500;
   cursor: pointer;
+  min-width: 44px;
 }
 
-.music-detail .inner-actions i {
-  color: #888;
+.music-detail .inner-action i {
+  font-size: 1.20em;
+  color: #3bc8e7;
+  margin-right: 6px;
+  transition: color 0.18s;
 }
 
-.music-detail .inner-actions .inner-like.active {
-  color: #0059ff;
+.music-detail .inner-action.inner-like.active,
+.music-detail .inner-action.inner-favorite.active {
+  color: #dd3158;
 }
 
-.music-detail .inner-actions .inner-like.active i {
-  font-weight: 900;
-  color: #0059ff;
+.music-detail .inner-action.inner-like.active i,
+.music-detail .inner-action.inner-favorite.active i {
+  color: #dd3158;
+  font-weight: bold;
 }
 
-.music-detail .inner-actions .inner-favorite.active {
-  color: #b90000;
-}
+/* .music-detail .inner-action:hover,
+.music-detail .inner-action:focus {
+  background: #e3f2fc;
+  color: #1a2c4b;
+  box-shadow: 0 6px 18px rgba(0, 28, 84, 0.13);
+} */
 
-.music-detail .inner-actions .inner-favorite.active i {
-  font-weight: 900;
-  color: #b90000;
+@media (max-width: 650px) {
+  .music-detail .inner-actions {
+    gap: 13px 13px;
+    margin-bottom: 12px;
+  }
+  .music-detail .inner-action {
+    padding: 6px 9px 7px 10px;
+    font-size: 0.97rem;
+    border-radius: 11px;
+  }
+  .music-detail .inner-action i { font-size: 1em; margin-right: 5px; }
 }
 
 /* ==== Phần phát nhạc ==== */
@@ -175,17 +201,139 @@
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 8px;
-  color: #333;
+  color: #fff;
 }
 
 .music-detail .inner-desc .inner-text {
   font-size: 15px;
   line-height: 1.6;
-  color: #444;
-  background: #f9f9f9;
+  color: #fff;
   padding: 12px;
   border-radius: 8px;
   white-space: pre;
+}
+
+.aplayer {
+  max-width: 850px;
+  width: 100%;
+  border-radius: 10px;
+  background: #1b2039;
+}
+
+.aplayer.aplayer-withlrc .aplayer-pic {
+  width: 200px;
+  height: 200px;
+}
+
+.aplayer .aplayer-info .aplayer-music {
+  padding: 10px;
+  font-family: "Josefin Sans", sans-serif;
+}
+
+.aplayer .aplayer-info .aplayer-music .aplayer-title {
+  font-size: 30px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.aplayer .aplayer-info .aplayer-music .aplayer-author {
+  font-size: 20px;
+  color: #ddd;
+}
+
+.aplayer.aplayer-withlrc .aplayer-lrc {
+  padding: 15px;
+}
+
+.aplayer .aplayer-lrc {
+  height: 30px;
+}
+
+
+.aplayer .aplayer-lrc:before {
+  background: none;
+}
+
+.aplayer .aplayer-lrc:after {
+  background: none;
+}
+
+.aplayer .aplayer-lrc p.aplayer-lrc-current {
+  font-size: 20px;
+  font-weight: 600;
+  color: #f6ff00;
+}
+
+.aplayer .aplayer-lrc p {
+  font-size: 20px;
+  font-family: "Josefin Sans", sans-serif;
+  color: #fff;
+}
+
+.aplayer .aplayer-info .aplayer-controller {
+  padding: 30px;
+}
+
+.aplayer .aplayer-info .aplayer-controller .aplayer-bar-wrap .aplayer-bar {
+  height: 4px;
+}
+
+.aplayer .aplayer-info .aplayer-controller .aplayer-time {
+  font-size: 16px;
+  font-family: "Josefin Sans", sans-serif;
+  color: #ddd;
+}
+
+.aplayer .aplayer-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.aplayer .aplayer-info .aplayer-controller .aplayer-volume-wrap .aplayer-volume-bar-wrap {
+  bottom: 20px;
+  right: 1px;
+}
+
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon path {
+  fill: #ddd;
+}
+
+.aplayer .aplayer-info .aplayer-controller .aplayer-time .aplayer-icon:hover path {
+  fill: #fff;
+}
+
+.aplayer .aplayer-info .aplayer-controller .aplayer-volume-wrap .aplayer-volume-bar-wrap .aplayer-volume-bar .aplayer-volume {
+  background: none;
+}
+
+.aplayer .aplayer-info .aplayer-controller .aplayer-volume-wrap .aplayer-volume-bar-wrap .aplayer-volume-bar {
+  height: 39px;
+}
+
+.aplayer .aplayer-pic .aplayer-play {
+  bottom: 46%;
+  right: 46%;
+  width: 40px;
+  height: 40px;
+}
+
+.aplayer .aplayer-pic .aplayer-play svg {
+  width: 35px;
+  height: 35px;
+}
+
+.aplayer .aplayer-pic .aplayer-pause {
+  bottom: 46%;
+  right: 46%;
+  width: 40px;
+  height: 40px;
+  margin: 0 -15px -15px 0;
+}
+
+.aplayer .aplayer-pic .aplayer-pause svg {
+  width: 35px;
+  height: 35px;
+  left: 3px;
 }
 /* End music-detail */
 

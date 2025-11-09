@@ -27,4 +27,10 @@ router.get("/password/reset", controller.resetPassword);
 
 router.post("/password/reset", validate.resetPasswordPost, controller.resetPasswordPost);
 
+router.get("/info", controller.info);
+
+router.patch(
+  "/info", controller.infoPatch
+);
+
 export const userRoutes: Router = router;

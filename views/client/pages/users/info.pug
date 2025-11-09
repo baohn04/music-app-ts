@@ -1,0 +1,30 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug 
+
+block main 
+  +alert-success(3000)
+  +alert-error(3000)
+
+  .ms_profile_wrapper
+    h1 Cập nhật thông tin cá nhân
+    .ms_profile_box
+      .ms_pro_img
+        img.img-fluid(src='images/pro_img.jpg' alt='')
+        .pro_img_overlay
+          i.fa_icon.edit_icon
+      .ms_pro_form
+        .form-group
+          label Your Name *
+          input.form-control(type='text' placeholder='Bella Scott')
+        .form-group
+          label Your Email *
+          input.form-control(type='text' placeholder='bella.scott@dummymail.com')
+        .form-group
+          label Your Password *
+          input.form-control(type='password' placeholder='******')
+        .form-group
+          label Confirm Password *
+          input.form-control(type='password' placeholder='******')
+        .pro-form-btn.text-center.marger_top15
+          a.ms_btn(href='#') save
+          a.ms_btn(href='#') cancel

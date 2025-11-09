@@ -195,3 +195,15 @@ export const resetPasswordPost = async (req: Request, res: Response) => {
   // req.flash("success", "Đổi mật khẩu thành công");
   res.redirect("/");
 }
+
+// [GET] /user/info
+export const info = async (req: Request, res: Response) => {
+  res.render("client/pages/users/info.pug", {
+    pageTitle: "Cập nhật thông tin cá nhân"
+  });
+};
+
+// [PATCH] /user/info
+export const infoPatch = async (req: Request, res: Response) => {
+  res.send("OK");
+};

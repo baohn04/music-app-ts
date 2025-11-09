@@ -6,8 +6,6 @@ block main
     .container.my-3 
       .row 
         .col-12 
-          .inner-title #{song.title} 
-
           .inner-actions 
             div(class="inner-action inner-time")
               <i class="fa-solid fa-clock"></i> 20/10/2023
@@ -20,16 +18,11 @@ block main
               <span> #{song.listen} lượt nghe
             div(class="inner-action inner-like" button-like=song.id)
               <i class="fa-regular fa-thumbs-up"></i> 
-              <span> #{song.like} thích
+              <span> #{song.like} like
             div(class=("inner-action inner-favorite " + (song.isFavoriteSong ? "active" : "")) button-favorite=song.id)
               <i class="fa-regular fa-heart"></i> Bài hát yêu thích
 
-          .inner-play 
-            .inner-avatar 
-              img(src=song.avatar, alt="")
-            //- .inner-audio
-            //-   audio(controls)
-            //-     source(src="https://backend.daca.vn/assets/audios/cat-doi-noi-sau.mp3") 
+          .inner-play
             div(id="aplayer" data-song=song data-singer=singer)
           
           .inner-desc   

@@ -87,7 +87,7 @@ if (buttonLike) {
       .then((data) => {
         if (data.code == 200) {
           const span = buttonLike.querySelector("span");
-          span.innerHTML = `${data.like} thích`;
+          span.innerHTML = `${data.like} like`;
           buttonLike.classList.toggle("active");
         }
       });

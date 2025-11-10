@@ -52,13 +52,13 @@ block main
                   .ms_rcnt_box_img
                     img(src=topic.avatar alt=topic.title)
                     .ms_main_overlay
-                      a(href=`${topic.slug}`)
+                      a(href=`/songs/topic/${topic.slug}`)
                         .ms_box_overlay
                         .ms_play_icon
                           img(src='/images/svg/play.svg' alt='')
                   .ms_rcnt_box_text
                     h3
-                      a(href=`${topic.slug}`) #{topic.title}
+                      a(href=`/songs/topic/${topic.slug}`) #{topic.title}
         //- Add Arrows
         .swiper-button-next1.slider_nav_next
         .swiper-button-prev1.slider_nav_prev

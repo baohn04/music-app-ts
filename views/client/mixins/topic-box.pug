@@ -2,14 +2,14 @@ mixin topicBox(topic)
   div(class="ms_genres_box")
     img.img-fluid(src=topic.avatar, alt=topic.title)
     div(class="ms_main_overlay")
-      a(href=`songs/topic/${topic.slug}`)
+      a(href=`/songs/topic/${topic.slug}`)
         div(class="ms_box_overlay")
         div(class="ms_play_icon")
           img(src="/images/svg/play.svg", alt="Play")
       div(class="ovrly_text_div")
         span(class="ovrly_text1")
-          a(href=`songs/topic/${topic.slug}`) #{topic.title}
+          a(href=`/songs/topic/${topic.slug}`) #{topic.title}
     div(class="ms_box_overlay_on")
       div(class="ovrly_text_div")
         span(class="ovrly_text1")
-          a(href=`songs/topic/${topic.slug}`) #{topic.title}
+          a(href=`/songs/topic/${topic.slug}`) #{topic.title}

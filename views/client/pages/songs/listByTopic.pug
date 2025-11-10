@@ -19,9 +19,9 @@ block main
           li #
           li Tên bài hát
           li Ca sĩ
+          li.text-center Thời lượng
           li.text-center Lượt nghe
-          li.text-center Like
-          li.text-center Yêu thích
+          li.text-center Lượt Like
         each song, index in songs
           ul
             li
@@ -33,12 +33,11 @@ block main
             li
               a(href=`/songs/singer/${song.infoSinger.slug}`) #{song.infoSinger.fullName}
             li.text-center
+              a.song-duration(data-audio=song.audio) --:--
+            li.text-center
               a(href='#') #{song.listen}
             li.text-center
               a(href='#') #{song.like}
-            li.text-center
-              a(href='#')
-                span.ms_icon1.ms_fav_icon
 
   .ms_content_wrapper.ms_artist_content
     .ms_featured_slider

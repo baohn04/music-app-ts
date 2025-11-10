@@ -1,22 +1,48 @@
 extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
+include ../../mixins/audio-player.pug
 
-block main 
-  .container.my-3 
-    .row 
-      .col-12 
-        +box-head(pageTitle)
+block main
+  if(favoriteSongs.length > 0)
+    .music-detail
+      div(class="ms_heading")
+        h1 Bài hát yêu thích
+      //- --Song List--
+      div#songs-data(
+        data-songs=JSON.stringify(infoSongs)
+        data-singers=JSON.stringify(singersOfFavoriteSongs)
+        style="display: none;"
+      )
+      .album_inner_list
+        .album_list_wrapper
+          ul.album_list_name
+            li #
+            li Tên bài hát
+            li Ca sĩ
+            li.text-center Thời lượng
+            li.text-center Lượt nghe
+            li.text-center Lượt Like
+          each item, index in favoriteSongs
+            ul
+              li
+                a(class="play-audio")
+                  span.play_no= String(index + 1).padStart(2, '0')
+                  span.play_hover.play-song-audio(data-index=index)
+              li
+                a(href=`/songs/detail/${item.infoSong.slug}`) #{item.infoSong.title}
+              li
+                a(href=`/songs/singer/${item.infoSinger.slug}`) #{item.infoSinger.fullName}
+              li.text-center
+                a.song-duration(data-audio=item.infoSong.audio) --:--
+              li.text-center
+                a(href='#') #{item.infoSong.listen}
+              li.text-center
+                a(href='#') #{item.infoSong.like}
+    //- --Main div close--
 
-    .row 
-      each item in favoriteSongs
-        .col-6.mb-3
-          div(class="song-item")
-            div(class="inner-image")
-              a(href=`/songs/detail/${item.infoSong.slug}`)
-                img(src=item.infoSong.avatar, alt=item.infoSong.title)
-            div(class="inner-content")
-              div(class="inner-title")
-                a(href=(`/songs/detail/${item.infoSong.slug}`)) #{item.infoSong.title} 
-              div(class="inner-singer") <i class="fa-solid fa-microphone-lines"></i> #{item.infoSinger.fullName}
-              div(class="inner-heart active" button-favorite=item.infoSong.id) <i class="fa-solid fa-heart"></i> Yêu thích
-              div(class="inner-time") <i class="fa-solid fa-clock"></i> 20/08/2025
+    //- Audio Player
+    +audioPlayer()
+  else 
+    .music-detail
+      div(class="ms_heading")
+        h1 Không có bài hát yêu thích nào

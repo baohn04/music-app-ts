@@ -14,6 +14,34 @@ if (showAlert) {
 }
 // End Show Alert
 
+// Song Duration Loader
+const durationNodes = document.querySelectorAll(".song-duration[data-audio]");
+if (durationNodes.length > 0) {
+  durationNodes.forEach((node) => {
+    const audioSrc = node.getAttribute("data-audio");
+    if (!audioSrc) return;
+    const audioEl = new Audio();
+    audioEl.preload = "metadata";
+    audioEl.src = audioSrc;
+
+    const formatTime = (seconds) => {
+      if (!isFinite(seconds)) return "--:--";
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+    };
+
+    audioEl.addEventListener("loadedmetadata", () => {
+      node.textContent = formatTime(audioEl.duration);
+    });
+
+    audioEl.addEventListener("error", () => {
+      node.textContent = "--:--";
+    });
+  });
+}
+// End Song Duration Loader
+
 // APlayer
 const aplayer = document.querySelector("#aplayer");
 if (aplayer) {

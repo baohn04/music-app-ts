@@ -2,19 +2,37 @@ doctype html
 html 
   head 
     title #{pageTitle}
+    //- plugins:css
+    link(rel='stylesheet' href='/admin/vendors/feather/feather.css')
+    link(rel='stylesheet' href='/admin/vendors/mdi/css/materialdesignicons.min.css')
+    link(rel='stylesheet' href='/admin/vendors/ti-icons/css/themify-icons.css')
+    link(rel='stylesheet' href='/admin/vendors/typicons/typicons.css')
+    link(rel='stylesheet' href='/admin/vendors/simple-line-icons/css/simple-line-icons.css')
+    link(rel='stylesheet' href='/admin/vendors/css/vendor.bundle.base.css')
+    //- endinject
+
+    //- Plugin css for this page
+    link(rel='stylesheet' href='/admin/vendors/datatables.net-bs4/dataTables.bootstrap4.css')
+    link(rel='stylesheet' href='/admin/js/select.dataTables.min.css')
+    //- End plugin css for this page
+
     link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css")
+    link(rel="stylesheet", href="/admin/css/custom.css")
     link(rel="stylesheet", href="/admin/css/style.css")
 
-  body 
-    
-    include ../partials/header.pug
-    
-    .body 
+    <link rel="shortcut icon" href="/images/favicon.png" />
 
-      include ../partials/sider.pug
+  body 
+    div(class="container-croller")
+      include ../partials/header.pug
       
-      .main 
-        block main
+      .body
+        div(class="container-fluid page-body-wrapper") 
+          include ../partials/sider.pug
+          .main 
+            block main
+
+      include ../partials/footer.pug
 
     script(src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js")
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js")
@@ -22,4 +40,24 @@ html
     script(src="/tinymce/tinymce.min.js") 
     script(src="/admin/js/tinymce-config.js") 
     //- End Tiny MCE
+
+    //- plugins:js
+    script(src='/admin/vendors/js/vendor.bundle.base.js')
+    //- endinject
+    //- Plugin js for this page
+    script(src='/admin/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js')
+    script(src='/admin/vendors/progressbar.js/progressbar.min.js')
+    //- End plugin js for this page
+    //- inject:js
+    script(src='/admin/js/off-canvas.js')
+    script(src='/admin/js/hoverable-collapse.js')
+    script(src='/admin/js/template.js')
+    script(src='/admin/js/settings.js')
+    script(src='/admin/js/todolist.js')
+    //- endinject
+    //- Custom js for this page
+    script(src='/admin/js/dashboard.js')
+    script(src='/admin/js/Chart.roundedBarCharts.js')
+    //- End custom js for this page
+
     script(src="/admin/js/script.js")     

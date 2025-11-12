@@ -1,17 +1,56 @@
-header.header 
-  .container-fluid
-    .row.align.items-center 
-      .col-3 
-        .inner-logo 
-          a(href=`${prefixAdmin}/dashboard`) ADMIN 
-
-      .col-9   
-        div(class="text-right")
-          a(
-            href=`${prefixAdmin}/info-admin`
-            class="btn btn-primary btn-sm"
-          ) #{user.fullName}
-          a(
-            href=`${prefixAdmin}/auth/logout`
-            class="btn btn-danger btn-sm"
-          ) Đăng xuất 
+header
+  nav.navbar.default-layout.col-lg-12.col-12.p-0.fixed-top.d-flex.align-items-top.flex-row
+    .text-center.navbar-brand-wrapper.d-flex.align-items-center.justify-content-start
+      .me-3
+        button.navbar-toggler.navbar-toggler.align-self-center(type='button' data-bs-toggle='minimize')
+          span.icon-menu
+      div
+        a.navbar-brand.brand-logo(href=`${prefixAdmin}/dashboard`)
+          img(src='/admin/images/logo.svg' alt='logo')
+        a.navbar-brand.brand-logo-mini(href=`${prefixAdmin}/dashboard`)
+          img(src='/admin/images/logo-mini.svg' alt='logo')
+    .navbar-menu-wrapper.d-flex.align-items-top
+      ul.navbar-nav.ms-auto
+        li.nav-item.dropdown
+          a#countDropdown.nav-link.count-indicator(href='#' data-bs-toggle='dropdown' aria-expanded='false')
+            i.icon-bell
+            span.count
+          .dropdown-menu.dropdown-menu-right.navbar-dropdown.preview-list.pb-0(aria-labelledby='countDropdown')
+            a.dropdown-item.py-3
+              p.mb-0.font-weight-medium.float-left You have 7 unread mails 
+              span.badge.badge-pill.badge-primary.float-right View all
+            .dropdown-divider
+            a.dropdown-item.preview-item
+              .preview-thumbnail
+                img.img-sm.profile-pic(src='/admin/images/faces/face10.jpg' alt='image')
+              .preview-item-content.flex-grow.py-2
+                p.preview-subject.ellipsis.font-weight-medium.text-dark Marian Garner 
+                p.fw-light.small-text.mb-0  The meeting is cancelled 
+            a.dropdown-item.preview-item
+              .preview-thumbnail
+                img.img-sm.profile-pic(src='/admin/images/faces/face12.jpg' alt='image')
+              .preview-item-content.flex-grow.py-2
+                p.preview-subject.ellipsis.font-weight-medium.text-dark David Grey 
+                p.fw-light.small-text.mb-0  The meeting is cancelled 
+            a.dropdown-item.preview-item
+              .preview-thumbnail
+                img.img-sm.profile-pic(src='/admin/images/faces/face1.jpg' alt='image')
+              .preview-item-content.flex-grow.py-2
+                p.preview-subject.ellipsis.font-weight-medium.text-dark Travis Jenkins 
+                p.fw-light.small-text.mb-0  The meeting is cancelled 
+        li.nav-item.dropdown.d-none.d-lg-block.user-dropdown
+          a#UserDropdown.nav-link(href='#' data-bs-toggle='dropdown' aria-expanded='false')
+            img.img-xs.rounded-circle(src=user.avatar alt='Profile image')
+          .dropdown-menu.dropdown-menu-right.navbar-dropdown(aria-labelledby='UserDropdown')
+            .dropdown-header.text-center
+              img.img-md.rounded-circle(src=user.avatar alt='Profile image')
+              p.mb-1.mt-3.font-weight-semibold #{user.fullName}
+              p.fw-light.text-muted.mb-0 #{user.email}
+            a.dropdown-item(href=`${prefixAdmin}/info-admin`)
+              i.dropdown-item-icon.mdi.mdi-account-outline.text-primary.me-2
+              |  My Profile 
+            a.dropdown-item(href=`${prefixAdmin}/auth/logout`)
+              i.dropdown-item-icon.mdi.mdi-power.text-primary.me-2
+              | Đăng xuất
+      button.navbar-toggler.navbar-toggler-right.d-lg-none.align-self-center(type='button' data-bs-toggle='offcanvas')
+        span.mdi.mdi-menu 

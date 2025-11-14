@@ -252,3 +252,172 @@ select.form-control {
   }
 }
 /* End Detail-page */
+
+/* Pagination Styles */
+nav .pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin: 30px 0;
+}
+
+nav .pagination .page-item {
+  margin: 0;
+  display: inline-block;
+}
+
+nav .pagination .page-link {
+  min-width: 40px;
+  height: 40px;
+  padding: 8px 16px;
+  margin: 0;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  color: #495057;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  user-select: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+nav .pagination .page-link:hover:not(:disabled) {
+  background: #007bff;
+  color: #fff;
+  border-color: #007bff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.25);
+}
+
+nav .pagination .page-item.active .page-link {
+  color: #fff;
+  border-color: #667eea;
+  font-weight: 600;
+  transform: scale(1.05);
+}
+
+nav .pagination .page-link:disabled,
+nav .pagination .page-link:disabled:hover {
+  background: #f5f5f5;
+  color: #bbb;
+  border-color: #e0e0e0;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Icon styles in pagination */
+nav .pagination .page-link i.mdi {
+  font-size: 18px;
+  line-height: 1;
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+/* Navigation buttons (Trang đầu, Trang trước, Trang sau, Trang cuối) */
+nav .pagination .page-item:first-child .page-link,
+nav .pagination .page-item:nth-child(2) .page-link,
+nav .pagination .page-item:nth-last-child(2) .page-link,
+nav .pagination .page-item:last-child .page-link {
+  font-weight: 500;
+  border-color: #dee2e6;
+  padding: 8px 12px;
+}
+
+nav .pagination .page-item:first-child .page-link:hover,
+nav .pagination .page-item:nth-child(2) .page-link:hover,
+nav .pagination .page-item:nth-last-child(2) .page-link:hover,
+nav .pagination .page-item:last-child .page-link:hover {
+  background: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+nav .pagination .page-item:first-child .page-link:hover i.mdi,
+nav .pagination .page-item:nth-child(2) .page-link:hover i.mdi,
+nav .pagination .page-item:nth-last-child(2) .page-link:hover i.mdi,
+nav .pagination .page-item:last-child .page-link:hover i.mdi {
+  transform: scale(1.1);
+}
+
+/* Responsive pagination */
+@media (max-width: 768px) {
+  nav .pagination {
+    gap: 3px;
+    margin: 20px 0;
+  }
+
+  nav .pagination .page-link {
+    min-width: 36px;
+    height: 36px;
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  /* Better spacing on mobile */
+  nav .pagination .page-item {
+    margin: 0 1px;
+  }
+}
+
+@media (max-width: 576px) {
+  nav .pagination .page-link {
+    min-width: 32px;
+    height: 32px;
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+
+  /* Icon size on small screens */
+  nav .pagination .page-link i.mdi {
+    font-size: 16px;
+  }
+
+  /* Simplify text on very small screens */
+  nav .pagination .page-item:first-child .page-link,
+  nav .pagination .page-item:nth-child(2) .page-link,
+  nav .pagination .page-item:nth-last-child(2) .page-link,
+  nav .pagination .page-item:last-child .page-link {
+    padding: 4px 8px;
+  }
+}
+
+/* Focus state for accessibility */
+nav .pagination .page-link:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+/* Smooth animation for active state change */
+nav .pagination .page-item {
+  transition: transform 0.2s ease;
+}
+
+nav .pagination .page-item.active {
+  animation: pulse 0.5s ease;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1.05);
+  }
+}
+/* End Pagination Styles */

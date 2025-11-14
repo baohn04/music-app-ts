@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import Role from "../../models/role.model";
 import { systemConfig } from "../../config/config";
+import convertToSlug from "../../helpers/convertToSlug";
+import paginationHelper from "../../helpers/pagination";
 
 // [GET] /admin/roles
 export const index = async (req: Request, res: Response) => {
@@ -8,10 +10,12 @@ export const index = async (req: Request, res: Response) => {
     deleted: false
   };
 
+
   const records = await Role.find(find);
+
   res.render("admin/pages/roles/index.pug", {
     pageTitle: "Quản lý phân quyền",
-    records: records
+    records: records,
   });
 }
 

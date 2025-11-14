@@ -10,101 +10,98 @@ block main
     +alert-success(3000)
     +alert-error(3000)
 
-    h1(class="mb-4") #{pageTitle}
+    .content-wrapper
+      .row
+        .col-lg-12.grid-margin.stretch-card
+          .card
+            .card-body
+              h4.card-title #{pageTitle}
 
-    .card.mb-3 
-      .card-header Bộ lọc và Tìm kiếm 
-      .card-body
-        .row
-          .col-6
-            +filter-status(filterStatus)
-          .col-6
-            +search(keyword)
-    
-    .card.mb-3 
-      .card-header Sắp xếp 
-      .card-body 
-        .row 
-          .col-4 
-            +sort()
+              .row.mb-3
+                .col-md-6
+                  +filter-status(filterStatus)
+                .col-md-6
+                  +search(keyword)
 
-    .card.mb-3 
-      .card-header Danh sách chủ đề
-      .card-body 
-        .row 
-          .col-8 
-          .col-4.text-right 
-            if(role.permissions.includes("topics_create"))
-              a(
-                href=`${prefixAdmin}/topics/create`
-                class="btn btn-outline-success"
-              ) + Thêm mới
+              .row.mb-3
+                .col-md-4
+                  +sort()
 
-        table(
-            class="table table-hover table-sm"
-            checkbox-multi
-          ) 
-            thead 
-              tr 
-                th STT
-                th Hình ảnh
-                th Tiêu đề
-                th Mô tả
-                th Vị trí
-                th Trạng thái
-                th Hành động
-
-            tbody
-              each item, index in topics 
-                tr 
-                  td #{index + 1}
-                  td 
-                    img(
-                      src=item.avatar 
-                      alt=item.title
-                      width="100px"
-                      height="auto"
-                    )
-                  td #{item.title}
-                  td !{item.description}
-                  td #{item.position}
-                  td
-                    if(role.permissions.includes("topics_edit"))
-                      if(item.status == "active")
-                        a(
-                          href="javascript:;"
-                          data-id=item.id
-                          data-status=item.status
-                          button-change-status 
-                          class="badge badge-success"
-                        ) Hoạt động
-                      else 
-                        a(
-                          href="javascript:;"
-                          data-id=item.id
-                          data-status=item.status
-                          button-change-status
-                          class="badge badge-danger"
-                        ) Dừng hoạt động
-                  td
-                    if(role.permissions.includes("topics_edit"))
-                      a(
-                        href=`${prefixAdmin}/topics/edit/${item.id}`
-                        class="btn btn-warning btn-sm"
-                      ) Sửa 
-                  
+              .row.mb-3
+                .col-12(style="text-align: right;")
+                  if(role.permissions.includes("topics_create"))
                     a(
-                      href=`${prefixAdmin}/topics/detail/${item.id}`
-                      class="btn btn-secondary btn-sm"
-                    ) Chi tiết
-                    if(role.permissions.includes("topics_delete"))
-                      button(
-                        class="btn btn-danger btn-sm"
-                        button-delete
-                        data-id=item.id
-                      ) Xóa
+                      href=`${prefixAdmin}/topics/create`
+                      class="btn btn-success"
+                    ) + Thêm mới
 
-    +pagination(pagination)
+              .table-responsive
+                table(
+                  class="table table-hover" 
+                  checkbox-multi 
+                ) 
+
+                  thead 
+                    tr 
+                      th STT
+                      th Hình ảnh
+                      th Tiêu đề
+                      th Mô tả
+                      th Vị trí
+                      th Trạng thái
+                      th Hành động
+
+                  tbody
+                    each item, index in topics 
+                      tr 
+                        td #{index + 1}
+                        td 
+                          img(
+                            src=item.avatar 
+                            alt=item.title
+                            width="100px"
+                            height="auto"
+                          )
+                        td #{item.title}
+                        td !{item.description}
+                        td #{item.position}
+                        td
+                          if(role.permissions.includes("topics_edit"))
+                            if(item.status == "active")
+                              a(
+                                href="javascript:;"
+                                data-id=item.id
+                                data-status=item.status
+                                button-change-status 
+                                class="badge badge-success" 
+                              ) Hoạt động
+                            else 
+                              a(
+                                href="javascript:;"
+                                data-id=item.id
+                                data-status=item.status
+                                button-change-status
+                                class="badge badge-danger" 
+                              ) Dừng hoạt động
+                        td
+                          if(role.permissions.includes("topics_edit"))
+                            a(
+                              href=`${prefixAdmin}/topics/edit/${item.id}`
+                              class="btn btn-warning btn-sm"
+                            ) Sửa 
+                          
+                          a(
+                            href=`${prefixAdmin}/topics/detail/${item.id}`
+                            class="btn btn-secondary btn-sm"
+                          ) Chi tiết
+                          if(role.permissions.includes("topics_delete"))
+                            button(
+                              class="btn btn-danger btn-sm"
+                              button-delete
+                              data-id=item.id
+                            ) Xóa
+
+        +pagination(pagination)
 
     //- Form delete item
     form(

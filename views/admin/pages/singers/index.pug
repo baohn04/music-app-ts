@@ -10,116 +10,115 @@ block main
     +alert-success(3000)
     +alert-error(3000)
 
-    h1(class="mb-4") #{pageTitle}
+    .content-wrapper
+      .row
+        .col-lg-12.grid-margin.stretch-card
+          .card
+            .card-body
 
-    .card.mb-3 
-      .card-header Bộ lọc và Tìm kiếm 
-      .card-body
-        .row
-          .col-6
-            +filter-status(filterStatus)
-          .col-6
-            +search(keyword)
-    
-    .card.mb-3 
-      .card-header Sắp xếp 
-      .card-body 
-        .row 
-          .col-4 
-            +sort()
+              h4.card-title #{pageTitle}
 
-    .card.mb-3 
-      .card-header Danh sách ca sĩ 
-      .card-body 
-        .row 
-          .col-8 
-          .col-4.text-right
-            if(role.permissions.includes("singers_create")) 
-              a(
-                href=`${prefixAdmin}/singers/create`
-                class="btn btn-outline-success"
-              ) + Thêm mới
+              .row.mb-3
+                .col-md-6
+                  +filter-status(filterStatus)
+                .col-md-6
+                  +search(keyword)
 
-        table(
-            class="table table-hover table-sm"
-            checkbox-multi
-          ) 
-            thead 
-              tr 
-                th STT
-                th Hình ảnh
-                th Tên ca sĩ
-                th Quốc gia
-                th Vị trí
-                th Trạng thái
-                th Hành động
+              .row.mb-3
+                .col-md-4
+                  +sort()
 
-            tbody
-              each item, index in singers 
-                tr 
-                  td #{index + 1}
-                  td 
-                    img(
-                      src=item.avatar 
-                      alt=item.fullName
-                      width="100px"
-                      height="auto"
-                    )
-                  td #{item.fullName}
-                  td #{item.nation}
-                  td #{item.position}
-                  td
-                    if(role.permissions.includes("singers_edit"))
-                      if(item.status == "active")
-                        a(
-                          href="javascript:;"
-                          data-id=item.id
-                          data-status=item.status
-                          button-change-status 
-                          class="badge badge-success"
-                        ) Hoạt động
-                      else 
-                        a(
-                          href="javascript:;"
-                          data-id=item.id
-                          data-status=item.status
-                          button-change-status
-                          class="badge badge-danger"
-                        ) Dừng hoạt động
-                  td
-                    if(role.permissions.includes("singers_edit"))
-                      a(
-                        href=`${prefixAdmin}/singers/edit/${item.id}`
-                        class="btn btn-warning btn-sm"
-                      ) Sửa 
-                  
+              .row.mb-3
+                .col-12(style="text-align: right;")
+                  if(role.permissions.includes("singers_create"))
                     a(
-                      href=`${prefixAdmin}/singers/detail/${item.id}`
-                      class="btn btn-secondary btn-sm"
-                    ) Chi tiết
-                    if(role.permissions.includes("singers_delete"))
-                      button(
-                        class="btn btn-danger btn-sm"
-                        button-delete
-                        data-id=item.id
-                      ) Xóa
+                      href=`${prefixAdmin}/singers/create`
+                      class="btn btn-success"
+                    ) + Thêm mới
 
-    +pagination(pagination)
+              .table-responsive
+                table(
+                  class="table table-hover" 
+                  checkbox-multi // Attribute từ code gốc
+                ) 
 
-    //- Form delete item
-    form(
-      action=""
-      method="POST"
-      id="form-delete-item"
-      data-path=`${prefixAdmin}/singers/delete`
-    )
+                  thead 
+                    tr 
+                      th STT
+                      th Hình ảnh
+                      th Tên ca sĩ
+                      th Quốc gia
+                      th Vị trí
+                      th Trạng thái
+                      th Hành động
 
-    //- Form change status
-    form(
-      action=""
-      method="POST"
-      id="form-change-status"
-      data-path=`${prefixAdmin}/singers/change-status`
-    )
+                  tbody
+                    each item, index in singers 
+                      tr 
+                        td #{index + 1}
+                        td 
+                          img(
+                            src=item.avatar 
+                            alt=item.fullName
+                            width="100px"
+                            height="auto"
+                          )
+                        td #{item.fullName}
+                        td #{item.nation}
+                        td #{item.position}
+                        td
+                          if(role.permissions.includes("singers_edit"))
+                            if(item.status == "active")
+                              a(
+                                href="javascript:;"
+                                data-id=item.id
+                                data-status=item.status
+                                button-change-status 
+                                class="badge badge-success"
+                              ) Hoạt động
+                            else 
+                              a(
+                                href="javascript:;"
+                                data-id=item.id
+                                data-status=item.status
+                                button-change-status
+                                class="badge badge-danger"
+                              ) Dừng hoạt động
+                        td
+                          if(role.permissions.includes("singers_edit"))
+                            a(
+                              href=`${prefixAdmin}/singers/edit/${item.id}`
+                              class="btn btn-warning btn-sm"
+                            ) Sửa 
+                          
+                          a(
+                            href=`${prefixAdmin}/singers/detail/${item.id}`
+                            class="btn btn-secondary btn-sm"
+                          ) Chi tiết
+                          if(role.permissions.includes("singers_delete"))
+                            button(
+                              class="btn btn-danger btn-sm"
+                              button-delete
+                              data-id=item.id
+                            ) Xóa
+
+
+              +pagination(pagination)
+
+
+              form(
+                action=""
+                method="POST"
+                id="form-delete-item"
+                data-path=`${prefixAdmin}/singers/delete`
+              )
+
+              form(
+                action=""
+                method="POST"
+                id="form-change-status"
+                data-path=`${prefixAdmin}/singers/change-status`
+              )
+
   else 
     h1 Bạn không có quyền truy cập vào trang này

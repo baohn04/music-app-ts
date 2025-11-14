@@ -25058,6 +25058,7 @@ dl li {
 
 .table td .badge {
   margin-bottom: 0;
+  color: #fff;
 }
 
 .table tr:last-child td {

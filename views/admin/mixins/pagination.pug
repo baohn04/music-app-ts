@@ -7,13 +7,17 @@ mixin pagination(pagination)
             class="page-link" 
             button-pagination
             button-pagination-value=1
-          ) Trang đầu 
+            title="Trang đầu"
+          )
+            i.mdi.mdi-chevron-double-left
         li(class="page-item")
           button(
             class="page-link"
             button-pagination 
             button-pagination-value=pagination.currentPage - 1
-          ) Trang trước
+            title="Trang trước"
+          )
+            i.mdi.mdi-chevron-left
       - for(var i = 1; i <= pagination.totalPage; i++)
           li(class=`page-item ${pagination.currentPage == i ? "active" : ""}`)
             button(
@@ -27,10 +31,14 @@ mixin pagination(pagination)
             class="page-link"
             button-pagination
             button-pagination-value=pagination.currentPage + 1
-          ) Trang sau
+            title="Trang sau"
+          )
+            i.mdi.mdi-chevron-right
         li(class="page-item")
           button(
             class="page-link"
             button-pagination 
             button-pagination-value=pagination.totalPage
-          ) Trang cuối
+            title="Trang cuối"
+          )
+            i.mdi.mdi-chevron-double-right

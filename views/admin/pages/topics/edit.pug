@@ -5,75 +5,94 @@ block main
   if(role.permissions.includes("topics_edit"))
     +alert-success(3000)
     +alert-error(3000)
-    
-    h1(class="mb-4") #{pageTitle}
 
-    form(
-      action=`${prefixAdmin}/topics/edit/${topic.id}?_method=PATCH`
-      method="POST"
-      enctype="multipart/form-data"
-    ) 
-      div(class="form-group")
-        label(for="title") Tiêu đề
-        input(
-          type="text"
-          class="form-control"
-          id="title"
-          name="title"
-          required
-          value=topic.title
-        )
-      div(
-        class="form-group"
-        upload-image
-      )
-        label(for="avatar") Ảnh
-        input(
-          type="file"
-          class="form-control-file"
-          id="avatar"
-          name="avatar"
-          accept="image/*"
-          upload-image-input
-        ) 
-        img(
-          src=topic.avatar
-          class="image-preview" 
-          upload-image-preview
-        ) 
-      div(class="form-group")
-        label(for="description") Mô tả
-        textarea(
-          class="form-control textarea-mce"
-          id="desc"
-          name="description"
-          rows="5"
-        ) #{topic.description}
-      div(class="form-group form-check form-check-inline")
-        input(
-          type="radio"
-          class="form-check-input"
-          id="statusActive"
-          name="status"
-          value="active"
-          checked=(topic.status == "active" ? true : false)
-        )
-        label(for="statusActive" class="form-check-label") Hoạt động 
-      div(class="form-group form-check form-check-inline")
-        input(
-          type="radio"
-          class="form-check-input"
-          id="statusInActive"
-          name="status"
-          value="inactive"
-          checked=(topic.status == "inactive" ? true : false)
-        )
-        label(for="statusInActive" class="form-check-label") Dừng hoạt động 
-      div(class="form-group")
-        button(
-          type="submit"
-          class="btn btn-primary"
-        ) Cập nhật
+    .content-wrapper
+      .row
+        .col-12.grid-margin
+          .card
+            .card-body
+              h4.card-title Chỉnh sửa chủ đề
+              
+              form.form-sample(
+                action=`${prefixAdmin}/topics/edit/${topic.id}?_method=PATCH`
+                method="POST"
+                enctype="multipart/form-data"
+              )
+                p.card-description
+                  | Nhập thông tin
+
+                .row
+                  .col-md-6
+                    .form-group.row
+                      label.col-sm-2.col-form-label(for="title") Tiêu đề
+                      .col-sm-10
+                        input.form-control(
+                          type="text"
+                          id="title"
+                          name="title"
+                          required
+                          value=topic.title
+                        )
+                  .col-md-6
+                    .form-group.row(upload-image)
+                      label.col-sm-2.col-form-label(for="avatar") Ảnh
+                      .col-sm-10
+                        input.form-control-file(
+                          type="file"
+                          id="avatar"
+                          name="avatar"
+                          accept="image/*"
+                          upload-image-input
+                        )
+
+                        img.image-preview(
+                          src=topic.avatar
+                          upload-image-preview
+                          style="max-width: 200px; margin-top: 10px;"
+                        )
+                
+                .row
+                  .col-md-12
+                    .form-group.row
+                      label.col-sm-2.col-form-label(for="desc") Mô tả
+                      .col-sm-10
+                        textarea.form-control.textarea-mce(
+                          id="desc"
+                          name="description"
+                          rows="5"
+                        ) #{topic.description}
+                
+                .row
+                  .col-md-6
+                    .form-group.row
+                      label.col-sm-3.col-form-label Trạng thái
+                      .col-sm-4
+                        .form-check
+                          label.form-check-label(for="statusActive")
+                            input#statusActive.form-check-input(
+                              type='radio'
+                              name='status'
+                              value='active'
+                              checked=(topic.status == "active" ? true : false)
+                            )
+                            | Hoạt động
+                      .col-sm-5
+                        .form-check
+                          label.form-check-label(for="statusInActive")
+                            input#statusInActive.form-check-input(
+                              type='radio'
+                              name='status'
+                              value='inactive'
+                              checked=(topic.status == "inactive" ? true : false)
+                            )
+                            | Dừng hoạt động
+                
+                .row
+                  .col-md-12
+                    button(
+                      type="submit"
+                      class="btn btn-primary me-2"
+                    ) Cập nhật
 
     script(src="/public/admin/css/style.css")
   else 

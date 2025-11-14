@@ -11,31 +11,62 @@
     //Active class can be hard coded directly in html file also as required
 
     function addActiveClass(element) {
-      if (current === "") {
-        //for root url
-        if (element.attr('href').indexOf("index.html") !== -1) {
+      var href = element.attr('href');
+      if (!href) return;
+      
+      var currentPath = location.pathname;
+      
+      // Remove query params and hash from href
+      var hrefPath = href.split('?')[0].split('#')[0];
+      
+      // Normalize paths: remove trailing slashes
+      hrefPath = hrefPath.replace(/\/$/, '') || '/';
+      currentPath = currentPath.replace(/\/$/, '') || '/';
+      
+      // For root url
+      if (currentPath === "" || currentPath === "/") {
+        if (hrefPath.indexOf("index.html") !== -1 || hrefPath === "/" || hrefPath === "") {
           element.parents('.nav-item').last().addClass('active');
           if (element.parents('.sub-menu').length) {
             element.closest('.collapse').addClass('show');
             element.addClass('active');
           }
         }
-      } else {
-        //for other url
-        if (element.attr('href').indexOf(current) !== -1) {
+        return;
+      }
+      
+      // Exact match - highest priority
+      if (hrefPath === currentPath) {
+        element.parents('.nav-item').last().addClass('active');
+        if (element.parents('.sub-menu').length) {
+          element.closest('.collapse').addClass('show');
+          element.addClass('active');
+        }
+        if (element.parents('.submenu-item').length) {
+          element.addClass('active');
+        }
+        return;
+      }
+      
+      // Match parent routes (e.g., /admin/topics/edit/123 should highlight /admin/topics)
+      // But exclude /create, /create/, etc. routes to avoid false matches
+      // Only match if current path starts with href + "/" and next segment is not "create"
+      if (currentPath.indexOf(hrefPath + '/') === 0) {
+        var remainingPath = currentPath.substring(hrefPath.length + 1);
+        var nextSegment = remainingPath.split('/')[0];
+        
+        // Don't match if next segment is "create" - this prevents /admin/topics from matching /admin/topics/create
+        // But allow other segments like "edit", "detail", etc.
+        if (nextSegment !== 'create') {
           element.parents('.nav-item').last().addClass('active');
           if (element.parents('.sub-menu').length) {
             element.closest('.collapse').addClass('show');
-            element.addClass('active');
-          }
-          if (element.parents('.submenu-item').length) {
             element.addClass('active');
           }
         }
       }
     }
 
-    var current = location.pathname.split("/").slice(-1)[0].replace(/^\/|\/$/g, '');
     $('.nav li a', sidebar).each(function() {
       var $this = $(this);
       addActiveClass($this);

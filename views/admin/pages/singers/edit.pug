@@ -2,81 +2,98 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
 block main
-  if(role.permissions.includes("singers_edit"))
+  if(role.permissions.includes("singers_create"))
     +alert-success(3000)
     +alert-error(3000)
-    
-    h1(class="mb-4") #{pageTitle}
 
-    form(
-      action=`${prefixAdmin}/singers/edit/${singer.id}?_method=PATCH`
-      method="POST"
-      enctype="multipart/form-data"
-    ) 
-      div(class="form-group")
-        label(for="fullName") Tên ca sĩ
-        input(
-          type="text"
-          class="form-control"
-          id="fullName"
-          name="fullName"
-          required
-          value=singer.fullName
-        )
-      div(class="form-group")
-        label(for="nation") Quốc gia
-        input(
-          type="text"
-          class="form-control"
-          id="nation"
-          name="nation"
-          required
-          value=singer.nation
-        )
-      div(
-        class="form-group"
-        upload-image
-      )
-        label(for="avatar") Ảnh
-        input(
-          type="file"
-          class="form-control-file"
-          id="avatar"
-          name="avatar"
-          accept="image/*"
-          upload-image-input
-        ) 
-        img(
-          src=singer.avatar
-          class="image-preview" 
-          upload-image-preview
-        ) 
-      div(class="form-group form-check form-check-inline")
-        input(
-          type="radio"
-          class="form-check-input"
-          id="statusActive"
-          name="status"
-          value="active"
-          checked=(singer.status == "active" ? true : false)
-        )
-        label(for="statusActive" class="form-check-label") Hoạt động 
-      div(class="form-group form-check form-check-inline")
-        input(
-          type="radio"
-          class="form-check-input"
-          id="statusInActive"
-          name="status"
-          value="inactive"
-          checked=(singer.status == "inactive" ? true : false)
-        )
-        label(for="statusInActive" class="form-check-label") Dừng hoạt động 
-      div(class="form-group")
-        button(
-          type="submit"
-          class="btn btn-primary"
-        ) Cập nhật
+    .content-wrapper
+      .row
+        .col-12.grid-margin
+          .card
+            .card-body
+              h4.card-title #{pageTitle}
+              
+              form.form-sample(
+                action=`${prefixAdmin}/singers/edit/${singer.id}?_method=PATCH`
+                method="POST"
+                enctype="multipart/form-data"
+              )
+                p.card-description
+                  | Nhập thông tin ca sĩ
+
+                .row
+                  .col-md-12
+                    .form-group.row
+                      label.col-sm-3.col-form-label(for="fullName") Tên ca sĩ
+                      .col-sm-9
+                        input.form-control(
+                          type="text"
+                          id="fullName"
+                          name="fullName"
+                          required
+                          value=singer.fullName
+                        )
+                  .col-md-12
+                    .form-group.row
+                      label.col-sm-3.col-form-label(for="nation") Quốc gia
+                      .col-sm-9
+                        input.form-control(
+                          type="text"
+                          id="nation"
+                          name="nation"
+                          required
+                          value=singer.nation
+                        )
+                
+                .row
+                  .col-md-12
+                    .form-group.row(upload-image)
+                      label.col-sm-3.col-form-label(for="avatar") Ảnh
+                      .col-sm-9
+                        input.form-control-file(
+                          type="file"
+                          id="avatar"
+                          name="avatar"
+                          accept="image/*"
+                          upload-image-input
+                        )
+                        img.image-preview(
+                          src=singer.avatar
+                          upload-image-preview
+                          style="max-width: 200px; margin-top: 10px;"
+                        )
+                  .col-md-12
+                    .form-group.row
+                      label.col-sm-3.col-form-label Trạng thái
+                      .col-sm-4
+                        .form-check
+                          label.form-check-label(for="statusActive")
+                            input#statusActive.form-check-input(
+                              type='radio'
+                              name='status'
+                              value='active'
+                              checked=(singer.status == "active" ? true : false)
+                            )
+                            | Hoạt động
+                      .col-sm-5
+                        .form-check
+                          label.form-check-label(for="statusInActive")
+                            input#statusInActive.form-check-input(
+                              type='radio'
+                              name='status'
+                              value='inactive'
+                              checked=(singer.status == "inactive" ? true : false)
+                            )
+                            | Dừng hoạt động
+
+                .row
+                  .col-md-12
+                    button(
+                      type="submit"
+                      class="btn btn-primary me-2"
+                    ) Cập nhật
 
     script(src="/public/admin/css/style.css")
+
   else 
     h1 Bạn không có quyền truy cập vào trang này

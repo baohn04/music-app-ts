@@ -1,3 +1,15 @@
+/* main */
+.main {
+  transition: width 0.25s ease, margin 0.25s ease;
+  width: calc(100% - 220px);
+  min-height: calc(100vh - 97px);
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+}
+/* End main */
+
 /* Show Alert */
 [show-alert] {
   position: fixed;

@@ -1,38 +1,99 @@
+//- extends ../../layouts/default.pug
+//- include ../../mixins/alert.pug
+
+//- block main 
+//-   if(role.permissions.includes("roles_create"))
+//-     +alert-success(3000)
+//-     +alert-error(3000)
+
+//-     h1(class="mb-4") #{pageTitle}
+
+//-     form(
+//-       action=`${prefixAdmin}/roles/create`
+//-       method="POST"
+//-     )
+//-       div(class="form-group")
+//-         label(for="title") Tiêu đề
+//-         input(
+//-           type="text"
+//-           class="form-control"
+//-           id="title"
+//-           name="title"
+//-           required
+//-         )
+//-       div(class="form-group")
+//-         label(for="desc") Mô tả
+//-         input(
+//-           type="text"
+//-           class="form-control"
+//-           id="desc"
+//-           name="description"
+//-         )
+//-       div(class="form-group")
+//-         button(
+//-           type="submit"
+//-           class="btn btn-primary"
+//-         ) Tạo mới
+//-   else 
+//-     h1 Bạn không có quyền truy cập vào trang này
+
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
-block main 
-  if(role.permissions.includes("roles_create"))
+block main
+  if(role.permissions.includes("singers_create"))
     +alert-success(3000)
     +alert-error(3000)
 
-    h1(class="mb-4") #{pageTitle}
+    .content-wrapper
+      .row
+        .col-12.grid-margin
+          .card
+            .card-body
+              h4.card-title #{pageTitle}
+              
+              form.form-sample(
+                action=`${prefixAdmin}/roles/create`
+                method="POST"
+              )
+                p.card-description
+                  | Nhập thông tin
 
-    form(
-      action=`${prefixAdmin}/roles/create`
-      method="POST"
-    )
-      div(class="form-group")
-        label(for="title") Tiêu đề
-        input(
-          type="text"
-          class="form-control"
-          id="title"
-          name="title"
-          required
-        )
-      div(class="form-group")
-        label(for="desc") Mô tả
-        input(
-          type="text"
-          class="form-control"
-          id="desc"
-          name="description"
-        )
-      div(class="form-group")
-        button(
-          type="submit"
-          class="btn btn-primary"
-        ) Tạo mới
+                .row
+                  .col-md-12
+                    .form-group.row
+                      label.col-sm-3.col-form-label(for="title") Tiêu đề
+                      .col-sm-9
+                        input.form-control(
+                          type="text"
+                          id="title"
+                          name="title"
+                          required
+                        )
+                  .col-md-12
+                    .form-group.row
+                      label.col-sm-3.col-form-label(for="desc") Quốc gia
+                      .col-sm-9
+                        input.form-control(
+                          type="text"
+                          id="desc"
+                          name="description"
+                          required
+                        )
+
+                .row
+                  .col-md-12
+                    button(
+                      type="submit"
+                      class="btn btn-primary me-2"
+                    ) Tạo mới
+                    button(
+                      type="button"
+                      class="btn btn-light"
+                      onclick="window.history.back()"
+                    ) Trở về
+
+    script(src="/public/admin/css/style.css")
+
   else 
     h1 Bạn không có quyền truy cập vào trang này

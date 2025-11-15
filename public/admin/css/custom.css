@@ -421,3 +421,212 @@ nav .pagination .page-item.active {
   }
 }
 /* End Pagination Styles */
+
+/* Admin Profile Page Styles */
+.admin-profile {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+.admin-profile .card-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.profile-avatar {
+  margin-bottom: 20px;
+}
+
+.profile-avatar .avatar-img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.profile-avatar .avatar-img:hover {
+  transform: scale(1.05);
+}
+
+.profile-role {
+  font-size: 28px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+  margin-top: 15px;
+}
+
+.profile-info {
+  margin-bottom: 30px;
+}
+
+.profile-info .info-item {
+  display: flex;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #f1f3f5;
+  transition: background-color 0.2s ease;
+}
+
+.profile-info .info-item:last-child {
+  border-bottom: none;
+}
+
+.profile-info .info-item:hover {
+  background-color: #f8f9fa;
+  margin: 0 -20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 6px;
+}
+
+.profile-info .info-label {
+  font-weight: 600;
+  color: #495057;
+  min-width: 150px;
+  font-size: 15px;
+  margin: 0;
+}
+
+.profile-info .info-value {
+  color: #2c3e50;
+  font-size: 15px;
+  font-weight: 500;
+  flex: 1;
+}
+
+.profile-info .badge {
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 12px;
+}
+
+.profile-info .badge-success {
+  background: #1fd4ef;
+  color: #fff;
+}
+
+.profile-info .badge-danger {
+  background: #dc3545;
+  color: #fff;
+}
+
+.profile-actions {
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 2px solid #e9ecef;
+  text-align: center;
+}
+
+.profile-actions .btn {
+  padding: 12px 30px;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
+}
+
+.profile-actions .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.profile-actions .btn i {
+  font-size: 18px;
+  vertical-align: middle;
+}
+
+.profile-actions .btn .mr-2 {
+  margin-right: 8px;
+}
+
+/* Responsive Profile Page */
+@media (max-width: 768px) {
+  .admin-profile {
+    padding: 10px 0;
+  }
+
+  .admin-profile .card-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .profile-header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+  }
+
+  .profile-avatar .avatar-img {
+    width: 120px;
+    height: 120px;
+  }
+
+  .profile-name {
+    font-size: 22px;
+  }
+
+  .profile-info .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px 0;
+  }
+
+  .profile-info .info-item:hover {
+    margin: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .profile-info .info-label {
+    min-width: auto;
+    margin-bottom: 5px;
+    font-size: 14px;
+  }
+
+  .profile-info .info-value {
+    font-size: 14px;
+  }
+
+  .profile-actions {
+    margin-top: 20px;
+    padding-top: 20px;
+  }
+
+  .profile-actions .btn {
+    width: 100%;
+    padding: 10px 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .profile-avatar .avatar-img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profile-name {
+    font-size: 18px;
+  }
+
+  .admin-profile .card-title {
+    font-size: 18px;
+  }
+}
+/* End Admin Profile Page Styles */

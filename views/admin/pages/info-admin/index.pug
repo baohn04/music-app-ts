@@ -1,31 +1,50 @@
 extends ../../layouts/default.pug 
 
 block main 
-  h1(class="mb-4") #{pageTitle}
-
-  if(user.avatar)
-    img(src=user.avatar with="150px" class="mb-3")
-  else 
-    img(src="/admin/images/avatar.png" with="150px" class="mb-3")
-
-  if(user.fullName)
-    p Họ tên: <b>#{user.fullName}</b>
-
-  if(user.email)
-    p Email: <b>#{user.email}</b>
-
-  if(user.phone)
-    p Số điện thoại: <b>#{user.phone}</b> 
-
-  p 
-    span Trạng thái: 
-    span 
-      <b>#{user.status === "active" ? "Hoạt động" : "Dừng hoạt động"}</b>
-
-  if(role.title)
-    p Phân quyền: <b>#{role.title}</b>
-
-  a(
-    href=`${prefixAdmin}/info-admin/edit`
-    class="btn btn-primary"
-  ) Chỉnh sửa thông tin 
+  .content-wrapper
+    .row
+      .col-lg-12.grid-margin.stretch-card
+        .card
+          .card-body
+            .admin-profile
+              h4.card-title.mb-4 #{pageTitle}
+              
+              .profile-header
+                .profile-avatar
+                  if(user.avatar)
+                    img(src=user.avatar alt="Avatar" class="avatar-img")
+                  else 
+                    img(src="/admin/images/avatar.png" alt="Avatar" class="avatar-img")
+                
+                if(role.title)
+                  h3.profile-role #{role.title}
+              
+              .profile-info
+                .info-item
+                  label.info-label Họ tên:
+                  span.info-value #{user.fullName || 'N/A'}
+                
+                if(user.email)
+                  .info-item
+                    label.info-label Email:
+                    span.info-value #{user.email}
+                
+                if(user.phone)
+                  .info-item
+                    label.info-label Số điện thoại:
+                    span.info-value #{user.phone}
+                
+                .info-item
+                  label.info-label Trạng thái:
+                  if(user.status === "active")
+                    span.badge.badge-success Hoạt động
+                  else
+                    span.badge.badge-danger Dừng hoạt động
+              
+              .profile-actions
+                a(
+                  href=`${prefixAdmin}/info-admin/edit`
+                  class="btn btn-primary"
+                ) 
+                  i.mdi.mdi-pencil.mr-2
+                  | Chỉnh sửa thông tin 

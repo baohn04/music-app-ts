@@ -1,39 +1,57 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
-block main 
-  if(role.permissions.includes("roles_edit"))
+block main
+  if(role.permissions.includes("singers_create"))
     +alert-success(3000)
     +alert-error(3000)
-    h1(class="mb-4") Chỉnh sửa nhóm quyền
 
-    form(
-      action=`${prefixAdmin}/roles/edit/${data.id}?_method=PATCH`
-      method="POST"
-    )
-      div(class="form-group")
-        label(for="title") Tiêu đề
-        input(
-          type="text"
-          class="form-control"
-          id="title"
-          name="title"
-          required
-          value=data.title
-        )
-      div(class="form-group")
-        label(for="desc") Mô tả
-        input(
-          type="text"
-          class="form-control"
-          id="desc"
-          name="description"
-          value=data.description
-        )
-      div(class="form-group")
-        button(
-          type="submit"
-          class="btn btn-primary"
-        ) Cập nhật
+    .content-wrapper
+      .row
+        .col-12.grid-margin
+          .card
+            .card-body
+              h4.card-title #{pageTitle}
+              
+              form.form-sample(
+                action=`${prefixAdmin}/roles/edit/${data.id}?_method=PATCH`
+                method="POST"
+              )
+                p.card-description
+                  | Nhập thông tin
+
+                .row
+                  .col-md-12
+                    .form-group.row
+                      label.col-sm-3.col-form-label(for="title") Tiêu đề
+                      .col-sm-9
+                        input.form-control(
+                          type="text"
+                          id="title"
+                          name="title"
+                          required
+                          value=data.title
+                        )
+                  .col-md-12
+                    .form-group.row
+                      label.col-sm-3.col-form-label(for="desc") Quốc gia
+                      .col-sm-9
+                        input.form-control(
+                          type="text"
+                          id="desc"
+                          name="description"
+                          required
+                          value=data.description
+                        )
+
+                .row
+                  .col-md-12
+                    button(
+                      type="submit"
+                      class="btn btn-primary me-2"
+                    ) Cập nhật
+
+    script(src="/public/admin/css/style.css")
+
   else 
     h1 Bạn không có quyền truy cập vào trang này

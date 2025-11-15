@@ -1,45 +1,69 @@
 extends ../../layouts/default.pug
 
 block main 
-  .admin-detail
-    h1(class="mb-4 title") Thông tin bài hát: #{pageTitle}
-
-    if(song.title)
-      h1(class="mb-4") Tên bài hát: #{song.title}
-
-    if(singer.fullName)
-      h1(class="mb-4") Ca sĩ: #{singer.fullName}  
-
-    if(topic.title)
-      h1(class="mb-4") Chủ đề: #{topic.title}
-
-    if(song.avatar)
-      div(class="mb-4")
-        span Hình ảnh:
-        img(
-          src=song.avatar 
-          alt=song.title
-          style="width: 100px"
-        )
-
-    if(song.status) 
-      div(class="mb-4")
-        span Trạng thái: 
-        if(song.status === "active")
-          span(class="badge badge-success") Hoạt động
-        else 
-          span(class="badge badge-danger") Dừng hoạt động
-
-    if(song.position)
-      div(class="mb-4") Vị trí: <b>#{song.position}</b>
-
-    if(song.description)
-      div(class="mb-4") Mô tả: !{song.description}
-
-    if(song.lyrics)
-      div(class="mb-4 lyric") Lời nhạc:<br>#{song.lyrics.replace(/\[\d{2}:\d{2}\.\d{2}\]/g, '')}
-
-    a(
-      href=`${prefixAdmin}/songs/edit/${song.id}`
-      class="btn btn-warning"
-    ) Chỉnh sửa 
+  .content-wrapper
+    .row
+      .col-lg-12.grid-margin.stretch-card
+        .card
+          .card-body
+            .admin-detail-page
+              h4.card-title.mb-4 Thông tin bài hát: #{pageTitle}
+              
+              .detail-header
+                if(song.avatar)
+                  .detail-avatar
+                    img(src=song.avatar alt=song.title class="avatar-img")
+                else
+                  .detail-avatar
+                    img(src="/admin/images/avatar.png" alt="Avatar" class="avatar-img")
+                
+                if(song.title)
+                  h3.detail-title #{song.title}
+              
+              .detail-info
+                if(song.title)
+                  .info-item
+                    label.info-label Tên bài hát:
+                    span.info-value #{song.title}
+                
+                if(singer && singer.fullName)
+                  .info-item
+                    label.info-label Ca sĩ:
+                    span.info-value #{singer.fullName}
+                
+                if(topic && topic.title)
+                  .info-item
+                    label.info-label Chủ đề:
+                    span.info-value #{topic.title}
+                
+                if(song.position)
+                  .info-item
+                    label.info-label Vị trí:
+                    span.info-value #{song.position}
+                
+                if(song.status)
+                  .info-item
+                    label.info-label Trạng thái:
+                    if(song.status === "active")
+                      span.badge.badge-success Hoạt động
+                    else
+                      span.badge.badge-danger Dừng hoạt động
+                
+                if(song.description)
+                  .info-item.info-item-full
+                    label.info-label Mô tả:
+                    .info-value.description-content !{song.description}
+                
+                if(song.lyrics)
+                  .info-item.info-item-full
+                    label.info-label Lời nhạc:
+                    .info-value.lyrics-content #{song.lyrics.replace(/\[\d{2}:\d{2}\.\d{2}\]/g, '')}
+              
+              .detail-actions
+                a(
+                  href=`${prefixAdmin}/songs/edit/${song.id}`
+                  class="btn btn-warning"
+                  title="Chỉnh sửa"
+                )
+                  i.mdi.mdi-pencil.mr-2
+                  | Chỉnh sửa 

@@ -1,36 +1,54 @@
 extends ../../layouts/default.pug
 
 block main 
-  .admin-detail
-    h1(class="mb-4 title") Thông tin ca sĩ: #{pageTitle}
-
-    if(singer.fullName)
-      h1(class="mb-4") Tên ca sĩ: #{singer.fullName}
-
-    if(singer.nation)
-      h1(class="mb-4") Quốc gia: #{singer.nation}
-
-    if(singer.avatar)
-      div(class="mb-4")
-        span Hình ảnh:
-        img(
-          src=singer.avatar 
-          alt=singer.fullName
-          style="width: 100px"
-        )
-
-    if(singer.status) 
-      div(class="mb-4")
-        span Trạng thái: 
-        if(singer.status === "active")
-          span(class="badge badge-success") Hoạt động
-        else 
-          span(class="badge badge-danger") Dừng hoạt động
-
-    if(singer.position)
-      div(class="mb-4") Vị trí: <b>#{singer.position}</b>
-
-    a(
-      href=`${prefixAdmin}/singers/edit/${singer.id}`
-      class="btn btn-warning"
-    ) Chỉnh sửa 
+  .content-wrapper
+    .row
+      .col-lg-12.grid-margin.stretch-card
+        .card
+          .card-body
+            .admin-detail-page
+              h4.card-title.mb-4 Thông tin ca sĩ: #{pageTitle}
+              
+              .detail-header
+                if(singer.avatar)
+                  .detail-avatar
+                    img(src=singer.avatar alt=singer.fullName class="avatar-img")
+                else
+                  .detail-avatar
+                    img(src="/admin/images/avatar.png" alt="Avatar" class="avatar-img")
+                
+                if(singer.fullName)
+                  h3.detail-title #{singer.fullName}
+              
+              .detail-info
+                if(singer.fullName)
+                  .info-item
+                    label.info-label Tên ca sĩ:
+                    span.info-value #{singer.fullName}
+                
+                if(singer.nation)
+                  .info-item
+                    label.info-label Quốc gia:
+                    span.info-value #{singer.nation}
+                
+                if(singer.position)
+                  .info-item
+                    label.info-label Vị trí:
+                    span.info-value #{singer.position}
+                
+                if(singer.status)
+                  .info-item
+                    label.info-label Trạng thái:
+                    if(singer.status === "active")
+                      span.badge.badge-success Hoạt động
+                    else
+                      span.badge.badge-danger Dừng hoạt động
+              
+              .detail-actions
+                a(
+                  href=`${prefixAdmin}/singers/edit/${singer.id}`
+                  class="btn btn-warning"
+                  title="Chỉnh sửa"
+                )
+                  i.mdi.mdi-pencil.mr-2
+                  | Chỉnh sửa 

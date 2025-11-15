@@ -1,63 +1,133 @@
 extends ../../layouts/default.pug
 
 block main
-  h1 Trang tổng quan
+  .content-wrapper
+    .row
+      .col-12
+        h4.page-title.mb-4
+          i.mdi.mdi-view-dashboard.mr-2
+          | Trang tổng quan
 
-  .row.mt-4 
-    .col-12 
-      .card.mb-4 
-        .card-header Thông tin tài khoản 
-        .card-body 
-          if(user.avatar)
-            img(
-              src=user.avatar 
-              style="height: 100px; margin-bottom: 15px;"
-            )
-          if(user.fullName)
-            p Họ tên: <b>#{user.fullName}</b>
-          if(user.email)
-            p Email: <b>#{user.email}</b>
-          if(user.phone)
-            p Số điện thoại: <b>#{user.phone}</b>
-          if(role.title)
-            p Phân quyền: <b>#{role.title}</b>
+    .row
+      .col-lg-12.mb-4
+        .card.dashboard-account-card
+          .card-body
+            .account-info-header
+              if(user.avatar)
+                .account-avatar
+                  img(src=user.avatar alt="Avatar" class="avatar-img")
+              else
+                .account-avatar
+                  img(src="/admin/images/avatar.png" alt="Avatar" class="avatar-img")
+              
+              .account-info
+                h3.account-name #{user.fullName || 'Admin'}
+                if(user.email)
+                  p.account-email
+                    i.mdi.mdi-email-outline.mr-2
+                    | #{user.email}
+            
+            .account-details
+              if(user.fullName)
+                .detail-item
+                  i.mdi.mdi-account-outline.detail-icon
+                  span.detail-label Họ tên:
+                  span.detail-value #{user.fullName}
+              
+              if(user.phone)
+                .detail-item
+                  i.mdi.mdi-phone-outline.detail-icon
+                  span.detail-label Số điện thoại:
+                  span.detail-value #{user.phone}
+              
+              if(role.title)
+                .detail-item
+                  i.mdi.mdi-account-key-outline.detail-icon
+                  span.detail-label Phân quyền:
+                  span.detail-value.badge-role #{role.title}
 
-    .col-6 
-      .card.mb-4 
-        .card-header Thống kê chủ đề 
-        .card-body
-          p Số lượng: <b>#{statictis.topic.total}</b>
-          p Hoạt động: <b>#{statictis.topic.active}</b>
-          p Dừng hoạt động: <b>#{statictis.topic.inactive}</b>
+    .row
+      .col-lg-6.col-md-6.mb-4
+        .card.stat-card.stat-card-primary
+          .card-body
+            .stat-header
+              i.mdi.mdi-folder-music.stat-icon
+              h5.stat-title Thống kê chủ đề
+            .stat-content
+              .stat-item
+                span.stat-label Tổng số:
+                span.stat-value #{statictis.topic.total || 0}
+              .stat-item
+                span.stat-label Hoạt động:
+                span.stat-value.stat-active #{statictis.topic.active || 0}
+              .stat-item
+                span.stat-label Dừng hoạt động:
+                span.stat-value.stat-inactive #{statictis.topic.inactive || 0}
 
-    .col-6 
-      .card.mb-4 
-        .card-header Thống kê ca sĩ
-        .card-body
-          p Số lượng: <b>#{statictis.singer.total}</b>
-          p Hoạt động: <b>#{statictis.singer.active}</b>
-          p Dừng hoạt động: <b>#{statictis.singer.inactive}</b>
+      .col-lg-6.col-md-6.mb-4
+        .card.stat-card.stat-card-success
+          .card-body
+            .stat-header
+              i.mdi.mdi-account-music.stat-icon
+              h5.stat-title Thống kê ca sĩ
+            .stat-content
+              .stat-item
+                span.stat-label Tổng số:
+                span.stat-value #{statictis.singer.total || 0}
+              .stat-item
+                span.stat-label Hoạt động:
+                span.stat-value.stat-active #{statictis.singer.active || 0}
+              .stat-item
+                span.stat-label Dừng hoạt động:
+                span.stat-value.stat-inactive #{statictis.singer.inactive || 0}
 
-    .col-6 
-      .card.mb-4 
-        .card-header Thống kê bài hát
-        .card-body
-          p Số lượng: <b>#{statictis.song.total}</b>
-          p Hoạt động: <b>#{statictis.song.active}</b>
-          p Dừng hoạt động: <b>#{statictis.song.inactive}</b>
+      .col-lg-6.col-md-6.mb-4
+        .card.stat-card.stat-card-info
+          .card-body
+            .stat-header
+              i.mdi.mdi-music.stat-icon
+              h5.stat-title Thống kê bài hát
+            .stat-content
+              .stat-item
+                span.stat-label Tổng số:
+                span.stat-value #{statictis.song.total || 0}
+              .stat-item
+                span.stat-label Hoạt động:
+                span.stat-value.stat-active #{statictis.song.active || 0}
+              .stat-item
+                span.stat-label Dừng hoạt động:
+                span.stat-value.stat-inactive #{statictis.song.inactive || 0}
 
-    .col-6 
-      .card.mb-4 
-        .card-header Tài khoản admin 
-        .card-body
-          p Số lượng: <b>#{statictis.accountAdmin.total}</b>
-          p Hoạt động: <b>#{statictis.accountAdmin.active}</b>
-          p Dừng hoạt động: <b>#{statictis.accountAdmin.inactive}</b>
+      .col-lg-6.col-md-6.mb-4
+        .card.stat-card.stat-card-warning
+          .card-body
+            .stat-header
+              i.mdi.mdi-account-supervisor.stat-icon
+              h5.stat-title Tài khoản admin
+            .stat-content
+              .stat-item
+                span.stat-label Tổng số:
+                span.stat-value #{statictis.accountAdmin.total || 0}
+              .stat-item
+                span.stat-label Hoạt động:
+                span.stat-value.stat-active #{statictis.accountAdmin.active || 0}
+              .stat-item
+                span.stat-label Dừng hoạt động:
+                span.stat-value.stat-inactive #{statictis.accountAdmin.inactive || 0}
 
-    .col-6 
-      .card.mb-4 
-        .card-header Tài khoản client 
-        .card-body
-          p Số lượng: <b>#{statictis.accountUser.total}</b>
-          p Hoạt động: <b>#{statictis.accountUser.active}</b>
-          p Dừng hoạt động: <b>#{statictis.accountUser.inactive}</b>
+      .col-lg-6.col-md-6.mb-4
+        .card.stat-card.stat-card-danger
+          .card-body
+            .stat-header
+              i.mdi.mdi-account-group.stat-icon
+              h5.stat-title Tài khoản client
+            .stat-content
+              .stat-item
+                span.stat-label Tổng số:
+                span.stat-value #{statictis.accountUser.total || 0}
+              .stat-item
+                span.stat-label Hoạt động:
+                span.stat-value.stat-active #{statictis.accountUser.active || 0}
+              .stat-item
+                span.stat-label Dừng hoạt động:
+                span.stat-value.stat-inactive #{statictis.accountUser.inactive || 0}
